@@ -1,2 +1,2 @@
-# 506F20GroupProject
+# README
 Stats 506 F20 Group Project
