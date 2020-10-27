@@ -7,3 +7,6 @@ Estimating linear or non-linear combinations of regression coefficients (includi
   1. R -- Aravind Mantravadi
   2. Python -- Yingyi Yang
   3. Stata -- Yan Chen
+
+
+We will primarily collaborate on Slack
