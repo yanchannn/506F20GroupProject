@@ -10,3 +10,7 @@ Estimating linear or non-linear combinations of regression coefficients (includi
 
 
 We will primarily collaborate on Slack
+
+# Dataset;
+
+https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016
