@@ -9,9 +9,3 @@ Group member's repos:
 [Yan Chen](https://github.com/yanchannn/Stats506_public)
 
 [Yingyi Yang](https://github.com/YingyiYang/Stats506_public)
-
-
-
-## Topic
-
-Estimating linear or non-linear combinations of regression coefficients (including standard errors).
