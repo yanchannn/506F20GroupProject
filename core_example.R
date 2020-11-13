@@ -17,8 +17,11 @@
 library(tidyverse)
 library(biostat3)
 library(doBy)
-base_wd = getwd()
-dataset = read.csv(file.path(base_wd, "/506F20GroupProject/master.csv"))
+#base_wd = getwd()
+#dataset = read.csv(file.path(base_wd, "/506F20GroupProject/master.csv"))
+
+dataset = read.csv(file="master.csv")
+
 
 
 # variable transormation
@@ -34,7 +37,7 @@ model = glm(suicides_no ~ year + sex + age + gdp_per_capita...., offset
             = log(population),
             family = poisson(link = "log"), data=dataset)
 
-summary(model)
+#summary(model)
 
 
         ##  Find estimates, std error and confidence intervals ##
@@ -167,31 +170,31 @@ plot_ci <- function(dataset, xvar="estimate", yvar="type", lower="lower",
 }
 
 
-
-      ## Create plots for each of the pairs of combinations ##
-
-
-# 25-34 males, 2005 vs 2015 #
-df1 = create_dataframe(male_25_34_2015, male_25_34_2005,
-                       "25-34 Males, 2015", "25-34 Males, 2005")
-
-plot_ci(dataset=df1)
-
-
-# 35-54 in 2015, male vs female #
-
-df2 = create_dataframe(male_35_54_2015, female_35_54_2015,
-                       "35-54 Males, 2015", "35-54 Females, 2015")
-
-plot_ci(dataset=df2)
-
-
-# male in 2015, 75+ vs 5-14 #
-
-df3 = create_dataframe(male_75_2015, male_5_14_2015,
-                       "75+ Males, 2015", "5-14 Females, 2015")
-
-plot_ci(dataset=df3)
+# 
+#       ## Create plots for each of the pairs of combinations ##
+# 
+# 
+# # 25-34 males, 2005 vs 2015 #
+# df1 = create_dataframe(male_25_34_2015, male_25_34_2005,
+#                        "25-34 Males, 2015", "25-34 Males, 2005")
+# 
+# plot_ci(dataset=df1)
+# 
+# 
+# # 35-54 in 2015, male vs female #
+# 
+# df2 = create_dataframe(male_35_54_2015, female_35_54_2015,
+#                        "35-54 Males, 2015", "35-54 Females, 2015")
+# 
+# plot_ci(dataset=df2)
+# 
+# 
+# # male in 2015, 75+ vs 5-14 #
+# 
+# df3 = create_dataframe(male_75_2015, male_5_14_2015,
+#                        "75+ Males, 2015", "5-14 Males, 2015")
+# 
+# plot_ci(dataset=df3)
 
 
 
@@ -206,14 +209,14 @@ plot_ci(dataset=df3)
 
 ##  TESTING ESTICON FUNCTION ##
     # Answers match #
-
-
-lambda1 = integer(39)
-lambda1[1] = 1 # set intercept
-lambda1[33] = 1 # set sexmale = 1
-lambda1[34] = 1 # set age25-34 years = 1
-lambda1[31] = 1 # set year2015 = 1
-
-
-estimates = esticon(model, lambda1)
+# 
+# 
+# lambda1 = integer(39)
+# lambda1[1] = 1 # set intercept
+# lambda1[33] = 1 # set sexmale = 1
+# lambda1[34] = 1 # set age25-34 years = 1
+# lambda1[31] = 1 # set year2015 = 1
+# 
+# 
+# estimates = esticon(model, lambda1)
 

@@ -8,7 +8,7 @@ Stats 506 F20 Group Project -- Group 7
 * The source code for:
   + R: core_example.R
   + Stata: Stata folder
-  + Python:
+  + Python: Python folder
 
 * The dataset is in master.csv
 
@@ -26,7 +26,7 @@ Stats 506 F20 Group Project -- Group 7
 
 ## Overview
 
-Regression models tell us about the effect of predictor variables on the response variable, but to find out the effect of specific predictors on the response, linear combinations are the way to go.
+Regression models tell us about the effect of predictor variables on the response variable, but to find out the effect of specific predictors on the response, linear combinations are the way to go about it.
 
 ## Method: Linear Combinations
 

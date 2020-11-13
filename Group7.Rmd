@@ -72,6 +72,7 @@ We will demonstrate our core example in 3 programming languages: R, Python and S
 
 ### **R**
 
+
 To fit a Poisson regression model, we use the glm function in R. We use `log(population)` as the offset, `year`, `sex`, `age`, `gdp_per_capita` as the predictor variables and `suicide_count` as the response variable.
 
 While R has an `esticon` function in the `doBy` package that calculates estimates, standard errors, confidence intervals and p-values for the desired linear combination, we did them by hand (and verified them using `esticon`). The vcov() function came in handy to store the variance-covariance matrix of the regression model.
