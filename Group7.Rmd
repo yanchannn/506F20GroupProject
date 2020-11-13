@@ -8,32 +8,66 @@ output:
 ---
 
 # **Introduction**
-According to the World Health Organization (WHO), every year close to 800,000 people die due to suicide which is one person every 40 seconds. The results of survey conducted by WHO in 2016 shows that suicide the third leading cause of 
-death in 15-19-year-olds. More than 79% of global suicides occurred in low- and middle-income countries which might be due to pesticide self-poisoning in rural agricultural areas. Suicide is a global phenomenon and occurs throughout the lifespan. The goal of this project is to demonstrate the use of Poisson 
-regression in modeling suicide count data using demographic variables such 
-as age and gender and make inference on linear and non-linear combinations of regression coefficients. 
 
-# **Data Description**
-In this tutorial, we use the [1985-2016 Suicide Rates Overview 
-Data](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016)
-which can be download from [Kaggle](https://www.kaggle.com). It is a compiled dataset pulled from four other datasets linked by time and place. It has 27820
-records in total. The target variables we are going to analyze are:
+## **Topic concepts**
+Regression models tell us about the effect of predictor variables on the response variable, but to find out the effect of specific predictors on the response, linear combinations are the way to go about it. Consider a regression model with response variable y and predictor variables x1, x2, x3 and x4. The regression model (without interactions) is:
 
-`country`: country of the suicide records; 101 in total; countries in America 
-and Europe occupy the majority 
+$y = \alpha + \beta1*x1 + \beta2*x2 + \beta3*x3 + \beta4*x4$
+
+If we want to make inferences about the effect x1 and x2 have on y, we need to create a linear combination of those variables
+
+$y_{lc} = \beta1*x1 + \beta2*x2$
+
+Of course just an estimate by itself doesn't tell us much, so we need to calculate standard errors, confidence intervals and p-values to know whether the effect is positive or negative and statistically significant.
+
+## **Why is it useful?**
+
+According to the World Health Organization (WHO), every year close to 800,000 people die due to suicide which is one person every 40 seconds. The results of survey conducted by WHO in 2016 shows that suicide the third leading cause of death in 15-19-year-olds. More than 79% of global suicides occurred in low and middle-income countries possibly due to pesticide self-poisoning in rural agricultural areas. Suicide is a global phenomenon and does not discriminate by age. The goal of this project is to demonstrate the use of Poisson regression in modeling suicide count data using demographic variables such as age and gender and make inferences on linear and non-linear combinations of regression coefficients.
+
+We will be comparing the effect of age, gender and year in three pairs, where each pair has two of the variables at the same level.
+We will be looking at the effect of:
+
+1. 25-34 year old males in 2015 vs 25-34 year old males in 2005 on suicide count
+
+2. 35-54 year old males in 2015 vs 35-54 year old females in 2015 on suicide count
+
+3. 75+ males in 2015 vs 5-14 males in 2015 on suicide count
+
+and draw inferences based on the estimates, confidence intervals and p-values obtained for each pair.
+
+
+## **Data Description**
+In this tutorial, we use the [1985-2016 Suicide Rates Overview Data](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016) which can be download from [Kaggle](https://www.kaggle.com). It is a compiled dataset pulled from four other datasets linked by time and place. It has 27820 records in total. The target variables we are going to analyze are:
+
+`country`: country of the suicide records; 101 in total; countries in America and Europe occupy the majority 
 
 `year`: year of the suicide records; range from 1985-2016.
 
 `sex`: male and female   
 
-`age`: age group of the suicide records; 6 groups: 5-14, 15-24, 25-34,
-35-54, 55-74 and 75+
+`age`: age group of the suicide records; 6 groups: 5-14, 15-24, 25-34, 35-54, 55-74 and 75+
 
 `suicides_no`: number of suicide  
 
 `population`: total population of a country with given sex and year
 
 `gdp_per_capita`: GDP per capita ($)
+
+## **Software and Tools used**
+
+We will demonstrate our core example in 3 programming languages: R, Python and Stata.
+
+### **R**
+
+To fit a poisson regression model, we use the glm function in R. We use `log(population)` as the offset, `year`, `sex`, `age`, `gdp_per_capita` as the predictor variables and `suicide_count` as the response variable.
+
+While R has an `esticon` function in the `doBy` package that calculates estimates, standard errors, confidence intervals and p-values for the desired linear combination, we did them by hand (and verified them using `esticon`). The vcov() function came in handy to store the variance-covariance matrix of the regression model.
+
+To plot confidence intervals we used the ggplot package and plotted horizontal error bars for each pair of linear combinations.
+
+### **Python**
+
+### **Stata**
 
 # **Core Analysis** {.tabset .tabset-pills}
 
@@ -47,4 +81,14 @@ and Europe occupy the majority
 
 
 ## Stata
+
+
+
+
+# **Conclusion**
+
+TODO
+
+
+
 

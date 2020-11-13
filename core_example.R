@@ -189,7 +189,7 @@ plot_ci(dataset=df2)
 # male in 2015, 75+ vs 5-14 #
 
 df3 = create_dataframe(male_75_2015, male_5_14_2015,
-                       "75+ Males, 2015", "5-14 Females, 2015")
+                       "75+ Males, 2015", "5-14 Males, 2015")
 
 plot_ci(dataset=df3)
 
