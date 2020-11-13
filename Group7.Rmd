@@ -53,6 +53,12 @@ In this tutorial, we use the [1985-2016 Suicide Rates Overview Data](https://www
 
 `gdp_per_capita`: GDP per capita ($)
 
+
+## **Model fitting**
+Since the response variable `suicides_no` is count based, we have fitted Poisson regression model with `year`, `sex`, `age`, `gdp_per_capita` as the predictors. Basically, we want to maximize the likelihood function below
+
+$$ $$
+
 ## **Software and Tools used**
 
 We will demonstrate our core example in 3 programming languages: R, Python and Stata.
