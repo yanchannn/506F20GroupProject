@@ -35,6 +35,9 @@ We will be looking at the effect of:
 
 and draw inferences based on the estimates, confidence intervals and p-values obtained for each pair.
 
+# **Outline** 
+
+This project mainly includes exploratory data analysis, model fitting, linear and nonlinear combination investigation using three statistical analysis tools: R, Python and Stata. The results are also visualized by the corresponding packages in these tools. 
 
 ## **Data Description**
 In this tutorial, we use the [1985-2016 Suicide Rates Overview Data](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016) which can be download from [Kaggle](https://www.kaggle.com). It is a compiled dataset pulled from four other datasets linked by time and place. It has 27820 records in total. The target variables we are going to analyze are:
@@ -81,7 +84,7 @@ To plot confidence intervals we used the ggplot package and plotted horizontal e
 
 ### **Python**
 
-Similarly, we use the glm function is Python statsmodels to fit the Poisson regression model.
+Similarly, we use the glm function in Python statsmodels to fit the Poisson regression model. The parameter estimates along with the confidence interval are obtained by retrieving the paramter array and covariance matrix from the fitted model. The results are visualized by matplotlib.pyplot.
 
 ### **Stata**
 
