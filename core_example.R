@@ -14,7 +14,7 @@
 
     ## Import libraries ##
 
-library(dplyr)
+library(tidyverse)
 library(biostat3)
 library(doBy)
 base_wd = getwd()
@@ -97,23 +97,102 @@ lcom <- function(var_list, code_list, vcov_matrix=matrix) {
   lower = lc_age_gender - tcr*std_error
   upper = lc_age_gender + tcr*std_error
   
+  remove_names = unname(c(lc_age_gender, std_error, lower, upper))
+  names(remove_names) = c("estimate", "se", "lower", "upper")
   
-  return (c(lc_age_gender, std_error, lower, upper))
+  return(remove_names)
   
 }
 
 
+# Binary factor codes are used to encode the variable #
 
 male_25_34_2015 = lcom(c("sexmale", "age25-34 years", "year2015"), c(1, 1, 1))
 male_25_34_2005 = lcom(c("sexmale", "age25-34 years", "year2005"), c(1, 1, 1))
-# factor code is 0, so the binary variable "sexmale" is absent, i.e. looking at female
+
 
 male_35_54_2015 = lcom(c("sexmale", "age35-54 years", "year2015"), c(1, 1, 1))
 female_35_54_2015 = lcom(c("sexmale", "age35-54 years", "year2015"), c(0, 1, 1))
 
 
-male_75 = lcom(c("sexmale", "age75+ years", "year2015"), c(1, 1, 1))
-male_15_24 = lcom(c("sexmale", "age15-24 years", "year2015"), c(1, 1, 1))
+male_75_2015 = lcom(c("sexmale", "age75+ years", "year2015"), c(1, 1, 1))
+male_5_14_2015 = lcom(c("sexmale", "age5-14 years", "year2015"), c(1, 1, 1))
+
+
+
+create_dataframe <- function(c1, c2, l1, l2) {
+  # A function to create a dataframe with columns c1 and c2
+  # Input: lists c1 and c2 that will become columns, l1, l2 are the extra names
+  # Output: A datframe with column names equal to the names of the list items
+  
+  # For plotting, create a column with the names of the columns
+  # for ex. "25-34 Males, 2015", "25-34 Males, 2005"
+  type = c(l1, l2)
+  
+  
+  temp = do.call(rbind, Map(data.frame, A=c1, B=c2))
+  transpose = t(as.matrix(temp))
+  
+  final_df = as.data.frame(transpose)
+  final_df = cbind(final_df, type)
+  
+  return(final_df)
+  
+}
+
+
+plot_ci <- function(dataset, xvar="estimate", yvar="type", lower="lower", 
+                    upper="upper", xlab="LC CI", ylab="LC groups",
+                    title="Linear Combination (LC) CI's") {
+  # Function to create a confidence interval plot using
+  # ggplot for the given variable
+  # Inputs: 
+  #    dataset - the dataset containing columns xvar, yvar,
+  #              lower, upper
+  #    xvar - the x-axis variable in question - (string) column in dataset
+  #    yvar - the y-axis variable in question - type in this script
+  #    lower - the lower confidence limit - (string) column in dataset
+  #    upper - the upper confidence limit - (string) column in dataset
+  #    xlab - the label that should be on the x-axis - related to var
+  #    ylab - the label that should be on the y-axis - census division
+  # Output: a plot of the CI of the linear combination.
+  
+  
+  dataset %>%
+    ggplot(aes_string(x = xvar, y = yvar)) +
+    geom_point(position = position_dodge(width = 0.4)) +
+    geom_errorbarh(aes_string(xmin = lower, xmax = upper),
+                   position = position_dodge(width = 0.4)) +
+    labs(x = xlab, y = ylab) + ggtitle("Linear Combination (LC) CI")
+}
+
+
+
+      ## Create plots for each of the pairs of combinations ##
+
+
+# 25-34 males, 2005 vs 2015 #
+df1 = create_dataframe(male_25_34_2015, male_25_34_2005,
+                       "25-34 Males, 2015", "25-34 Males, 2005")
+
+plot_ci(dataset=df1)
+
+
+# 35-54 in 2015, male vs female #
+
+df2 = create_dataframe(male_35_54_2015, female_35_54_2015,
+                       "35-54 Males, 2015", "35-54 Females, 2015")
+
+plot_ci(dataset=df2)
+
+
+# male in 2015, 75+ vs 5-14 #
+
+df3 = create_dataframe(male_75_2015, male_5_14_2015,
+                       "75+ Males, 2015", "5-14 Females, 2015")
+
+plot_ci(dataset=df3)
+
 
 
 
