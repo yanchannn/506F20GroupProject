@@ -88,6 +88,12 @@ Similarly, we use the glm function in Python statsmodels to fit the Poisson regr
 
 ### **Stata**
 
+We can fit the Poisson regression using `poisson` in Stata and use option 
+`offset` to set an offset or use `exposure` which is equivalent to adding 
+`offset(log_var)`. To get the estimated linear combination of coefficients, we 
+can use `lincom`. It will output the point estimates, standard errors, t or z statistics, p-values, and confidence intervals. Similarly, we can use `nlcom` to
+get the results for non-linear combination of coefficients.
+
 # **Core Analysis** {.tabset .tabset-pills}
 
 ## Python
@@ -131,7 +137,144 @@ plot_ci(dataset=df3)
 
 
 ## Stata
+### Data Cleaning
 
+First we will get the data from url and clean the data.
+```{r, echo = TRUE, eval = FALSE}
+* download and save data
+local base_url ///
+https://raw.githubusercontent.com/aravind1338/506F20GroupProject/main
+import delimited `base_url'/master.csv, clear
+keep ïcountry year sex age suicides_no population gdp_for_year 
+
+* rename variables 
+rename (ïcountry suicides_no gdp_for_year) ///
+	   (country count gdp)
+
+* convert gender from str to binary 
+generate byte gender = 1 if sex == "male"
+replace gender = 0 if sex == "female"
+label define gender_label 0 "Female" 1 "Male" , replace
+label values gender gender_label
+
+* conveert gdp to numeric
+destring gdp, replace ignore(",")
+
+* convert age from string to categorical
+generate byte age_group=1 if age == "5-14 years"
+replace age_group = 2 if age == "15-24 years"
+replace age_group = 3 if age == "25-34 years"
+replace age_group = 4 if age == "35-54 years"
+replace age_group = 5 if age == "55-74 years"
+replace age_group = 6 if age == "75+ years"
+label define ag_label 1 "5-14 years" 2 "15-24 years" 3 "25-34 years" ///
+					  4 "35-54 years" 5 "55-74 years" 6 "75+ years"
+label values age_group ag_label
+
+* drop columns
+drop sex age
+
+* save data
+save cleaned.dta, replace
+use cleaned, clear 
+```
+
+### EDA
+```{r, echo = TRUE, eval = FALSE}
+tabstat count, by(gender) stats(mean sd n)
+```
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/eda_gender.png?raw=true){width=200px}
+
+```{r, echo = TRUE, eval = FALSE}
+tabstat count, by(age_group) stats(mean sd n)
+```
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/eda_age.png?raw=true){width=200px}
+
+### Analysis
+
+We can use function `poisson` to fit a Poisson regression model. 
+Option `exposure(population)` means add log(population) as an offset. We can
+also use option `offset(log_population)`. Option `irr` means to present the regression results as incident rate ratios.
+
+```{r, echo = TRUE, eval = FALSE}
+* Fit a Poisson model using age_group, year, gdp and gender
+poisson count i.age_group i.gender i.year gdp, exposure(population), irr
+```
+
+Below is partial results of the moodel. Since there are many variables in the model and the results are too long to present, I only show several coefficients here.
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/poi_1.png?raw=true){width=400px}
+
+
+
+#### Linear Commbination of Coefficient: example 1
+
+In this example, we are trying to figure out the estimated difference between 
+25-34 males in 2015 and 25-34 males 2005. So we first change the base level of
+age to 24-34 and base level of gender to male and fit a Poisson model.
+
+```{stata, echo = TRUE, eval = FALSE}
+* Linear combinations of coefficients
+** 25-34 males in 2015 vs 25-34 males 2005;  different year
+** change the reference level to 25-34 and male
+poisson count ib3.age_group ib1.gender i.year gdp, exposure(population), irr
+```
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/poi_2.png?raw=true){width=400px}
+
+Now we use funtcion `lincom` to get the estimated difference between the two 
+coefficient in terms of incidence-rate ratios. 
+
+`lincom` computes point estimates, 
+standard errors, t or z statistics, p-values, and confidence
+intervals for linear combinations of coefficients after any estimation command.
+Results can optionally be displayed as incidence-rate ratios for poisson model.
+
+The default levle of confidence interval is 95%, and we don't specify it in our model. 
+
+```{stata eg1, echo = TRUE, eval = FALSE}
+lincom 2015.year - 2005.year , irr 
+```
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l1.png?raw=true){width=400px}
+
+
+#### Linear Commbination of Coefficient: example 2
+
+In this example, we are trying to figure out the estimated difference between 
+35-54 males in 2015 and 35-54 females 2015. So we first change the base level of
+age to 35-54 and year to 2015 and fit a Poisson model.
+
+```{stata eg2, echo = TRUE, eval = FALSE}
+** 35-54 males in 2015 vs 35-54 females 2015; different gender
+poisson count ib4.age_group i.gender ib2015.year gdp, exposure(population), irr
+lincom 1.gender, irr
+```
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l2.png?raw=true){width=400px}
+
+
+#### Linear Commbination of Coefficient: example 3
+```{stata eg3, echo = TRUE, eval = FALSE}
+** 75+ males in 2015 vs 15-24 males in 2015; different age
+poisson count i.age_group ib1.gender ib2015.year gdp, exposure(population), irr
+lincom 5.age_group - 2.age_group, irr
+```
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l3.png?raw=true){width=400px}
+
+
+#### Non-linear Combination of Coefficient:
+(details to be added)
+```{stata nonlinear, echo = TRUE, eval = FALSE}
+** non-linear combinations of coefficients: get the relative risk of a gender
+poisson count i.age_group i.gender i.year gdp, exposure(population)
+nlcom (E_gender:exp(_b[1.gender]))
+```
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/n1.png?raw=true){width=400px}
 
 
 
