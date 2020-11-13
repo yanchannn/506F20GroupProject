@@ -55,9 +55,15 @@ In this tutorial, we use the [1985-2016 Suicide Rates Overview Data](https://www
 
 
 ## **Model fitting**
-Since the response variable `suicides_no` is count based, we have fitted Poisson regression model with `year`, `sex`, `age`, `gdp_per_capita` as the predictors. Basically, we want to maximize the likelihood function below
+Since the response variable `suicides_no` is count based, we have fitted Poisson regression model with `year`, `sex`, `age`, `gdp_per_capita` as the predictors. Basically, we want to maximize the joint likelihood function below
 
-$$ $$
+$$L(\beta) = \prod_{i=1}^n \frac{\lambda_i^{y_i} e^{-\lambda_i}}{y_i!}$$ 
+
+where $\lambda_i$ is the event rate for ith sample and is calculated using the link function $\lambda_i = e^{x_i \beta}$. The log-likelihood function for the Poisson regression model is 
+
+$$\ln L(\beta) = \sum_{i=1}^n (y_ix_i\beta-e^{x_i\beta}-\ln{y_i!})$$
+
+After differentiating this log-likelihood equation with respect to $\beta$ and set to zero, we can get $\sum_{i=1}^n (y_i-e^{x_i\beta})x_i = 0$. Solving this equation for the regression coefficients $\beta$ $will yield the Maximum Likelihood Estimate (MLE) for $\beta$.
 
 ## **Software and Tools used**
 
