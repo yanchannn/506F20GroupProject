@@ -1,6 +1,6 @@
 ---
 title: "STATS 506 Group7 Project"
-author: "Yan Chen, Aravind Mantravadi,Yingyi Yang"
+author: "Yan Chen, Aravind Mantravadi, Yingyi Yang"
 date: "11/12/2020"
 output: 
   html_document:
@@ -73,11 +73,42 @@ To plot confidence intervals we used the ggplot package and plotted horizontal e
 
 ## Python
 
-```{r}
+
+## R
+
+```{r linear_combinations, echo=FALSE, message=FALSE, warning=FALSE, fig.width=15, fig.height=7}
+
+
+# Construct the confidence interval figures
+source('core_example.R')
+
+      ## Create plots for each of the pairs of combinations ##
+
+
+# 25-34 males, 2005 vs 2015 #
+df1 = create_dataframe(male_25_34_2015, male_25_34_2005,
+                       "25-34 Males, 2015", "25-34 Males, 2005")
+
+plot_ci(dataset=df1)
+
+
+# 35-54 in 2015, male vs female #
+
+df2 = create_dataframe(male_35_54_2015, female_35_54_2015,
+                       "35-54 Males, 2015", "35-54 Females, 2015")
+
+plot_ci(dataset=df2)
+
+
+# male in 2015, 75+ vs 5-14 #
+
+df3 = create_dataframe(male_75_2015, male_5_14_2015,
+                       "75+ Males, 2015", "5-14 Males, 2015")
+
+plot_ci(dataset=df3)
 
 ```
 
-## R
 
 
 ## Stata
@@ -85,9 +116,20 @@ To plot confidence intervals we used the ggplot package and plotted horizontal e
 
 
 
-# **Conclusion**
+# **Conclusion/Discussion**
 
 TODO
+
+
+
+# **TODO**
+
+* We need to estimate non-linear combinations of coefficients, and add explanations of what those mean in the Introduction
+* We need to add a conclusion/discussion, comparing and contrasting the tools that were used.
+* **R:** make the CI plots better by adjusting x-ticks and perhaps adding colors
+
+
+
 
 
 
