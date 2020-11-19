@@ -105,7 +105,7 @@ get the results for non-linear combination of coefficients.
 
 
 # Construct the confidence interval figures
-source('core_example.R')
+source('R/core_example.R')
 
       ## Create plots for each of the pairs of combinations ##
 
@@ -241,7 +241,7 @@ lincom 2015.year - 2005.year , irr
 ![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l1.png?raw=true){width=400px}
 
 
-#### Linear Commbination of Coefficient: example 2
+#### Linear Combination of Coefficient: example 2
 
 In this example, we are trying to figure out the estimated difference between 
 35-54 males in 2015 and 35-54 females 2015. So we first change the base level of
