@@ -1,6 +1,8 @@
 # README
 This folder contains source code of Stata and the screenshots of results in Stata.
 
+This part of work is done by Yan Chen.
+
 ## Files Description
 
 * `project.do` contains the cource code
