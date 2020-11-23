@@ -4,7 +4,7 @@ Stats 506 F20 Group Project -- Group 7
 
 ## Navigating the repo
 
-* The full core example with output and figures can be found in Group7.html
+* The full core example with outputs and figures can be found in Group7.html
 * The source code for:
   + R: [R](https://github.com/aravind1338/506F20GroupProject/tree/main/R) folder
   + Stata: [Stata](https://github.com/aravind1338/506F20GroupProject/tree/main/STATA) folder
@@ -32,7 +32,7 @@ Regression models tell us about the effect of predictor variables on the respons
 
 The 1985-2006 Suicide Rate data for 101 different countries and 6 age groups, found on [Kaggle](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016)
 
-## Methods
+## Core Examples
 
 We used linear and non-linear combinations of predictor variables to draw inferences.
 
