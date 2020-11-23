@@ -140,7 +140,7 @@ plot_ci(dataset=df3)
 ### Data Cleaning
 
 First we will get the data from url and clean the data.
-```{r, echo = TRUE, eval = FALSE}
+```{stata, echo = TRUE, eval = FALSE}
 * download and save data
 local base_url ///
 https://raw.githubusercontent.com/aravind1338/506F20GroupProject/main
@@ -180,13 +180,13 @@ use cleaned, clear
 ```
 
 ### Summary Table
-```{r, echo = TRUE, eval = FALSE}
+```{stata, echo = TRUE, eval = FALSE}
 tabstat count, by(gender) stats(mean sd n)
 ```
 
 ![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/eda_gender.png?raw=true){width=300px}
 
-```{r, echo = TRUE, eval = FALSE}
+```{stata, echo = TRUE, eval = FALSE}
 tabstat count, by(age_group) stats(mean sd n)
 ```
 
@@ -198,7 +198,7 @@ We can use function `poisson` to fit a Poisson regression model.
 Option `exposure(population)` means add log(population) as an offset. We can
 also use option `offset(log_population)`. Option `irr` means to present the regression results as incident rate ratios.
 
-```{r, echo = TRUE, eval = FALSE}
+```{stata, echo = TRUE, eval = FALSE}
 * Fit a Poisson model using age_group, year, gdp and gender
 poisson count i.age_group i.gender i.year gdp, exposure(population), irr
 ```
