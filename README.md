@@ -6,21 +6,21 @@ Stats 506 F20 Group Project -- Group 7
 
 * The full core example with output and figures can be found in Group7.html
 * The source code for:
-  + R: R folder
-  + Stata: Stata folder
-  + Python: Python folder
+  + R: [R](https://github.com/aravind1338/506F20GroupProject/tree/main/R) folder
+  + Stata: [Stata](https://github.com/aravind1338/506F20GroupProject/tree/main/STATA) folder
+  + Python: [Python](https://github.com/aravind1338/506F20GroupProject/tree/main/Python) folder
 
-* The dataset is in master.csv
+* The dataset is in [master.csv](https://github.com/aravind1338/506F20GroupProject/blob/main/master.csv)
 
 
 
-## Group member's repos:
+## Group members:
 
-[Aravind Mantravadi](https://github.com/aravind1338/Stats506_public)
+[Aravind Mantravadi](https://github.com/aravind1338/Stats506_public): R
 
-[Yan Chen](https://github.com/yanchannn/Stats506_public)
+[Yan Chen](https://github.com/yanchannn/Stats506_public): Stata
 
-[Yingyi Yang](https://github.com/YingyiYang/Stats506_public)
+[Yingyi Yang](https://github.com/YingyiYang/Stats506_public): Python
 
 
 
