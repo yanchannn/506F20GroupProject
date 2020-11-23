@@ -7,8 +7,8 @@ Stats 506 F20 Group Project -- Group 7
 * The full core example with output and figures can be found in Group7.html
 * The source code for:
   + R: core_example.R
-  + Stata: Stata folder
-  + Python: Python folder
+  + Stata: [Stata](https://github.com/yanchannn/506F20GroupProject/tree/main/STATA) folder
+  + Python: [Python](https://github.com/yanchannn/506F20GroupProject/tree/main/Python) folder
 
 * The dataset is in master.csv
 
