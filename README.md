@@ -38,7 +38,10 @@ We used linear and non-linear combinations of predictor variables to draw infere
 
 ### Linear Combinations
 
-Do males or females have a higher effect on the suicide count in teenagers? Are working-age females more influential on the suicide count than retired females? To answer these questions, we will build a poisson regression model and explore the effect of age, gender and year in pairs on the suicide count as a linear combination.
+* Do males or females have a higher effect on the suicide count in teenagers? 
+* Are working-age females more influential on the suicide count than retired females? 
+
+To answer these questions, we will build a poisson regression model and explore the effect of age, gender and year in pairs on the suicide count as a linear combination.
 
 
 ### Non-linear combinations
