@@ -16,9 +16,11 @@ $y = \alpha + \beta1*x1 + \beta2*x2 + \beta3*x3 + \beta4*x4$
 
 If we want to make inferences about the effect x1 and x2 have on y, we need to create a linear combination of those variables
 
-$y_{lc} = \beta1*x1 + \beta2*x2$
+$y_{lc} = exp(\beta1*x1 + \beta2*x2)$
 
-Of course just an estimate by itself doesn't tell us much, so we need to calculate standard errors, confidence intervals and p-values to know whether the effect is positive or negative and statistically significant.
+Of course just an estimate by itself doesn't tell us much, so we need to calculate standard errors, confidence intervals and p-values to know whether the effect is positive or negative and statistically significant. We can interpret the difference $exp(x_1) - exp(x_2)$ as the difference in expected value of the response variable (suicide count in this case).
+
+Similarly, we can interpret the **nonlinear combination** of regression coefficients, $exp(x1)/exp(x2)$ as the ratio of the expected value of the response variable.
 
 ## **Why is it useful?**
 
@@ -286,13 +288,5 @@ TODO
 
 # **TODO**
 
-* We need to estimate non-linear combinations of coefficients, and add explanations of what those mean in the Introduction
 * We need to add a conclusion/discussion, comparing and contrasting the tools that were used.
-* **R:** make the CI plots better by adjusting x-ticks and perhaps adding colors
-
-
-
-
-
-
 

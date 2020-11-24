@@ -405,8 +405,9 @@ summary {
 <p>Regression models tell us about the effect of predictor variables on the response variable, but to find out the effect of specific predictors on the response, linear combinations are the way to go about it. Consider a regression model with response variable y and predictor variables x1, x2, x3 and x4. The regression model (without interactions) is:</p>
 <p><span class="math inline">\(y = \alpha + \beta1*x1 + \beta2*x2 + \beta3*x3 + \beta4*x4\)</span></p>
 <p>If we want to make inferences about the effect x1 and x2 have on y, we need to create a linear combination of those variables</p>
-<p><span class="math inline">\(y_{lc} = \beta1*x1 + \beta2*x2\)</span></p>
-<p>Of course just an estimate by itself doesn’t tell us much, so we need to calculate standard errors, confidence intervals and p-values to know whether the effect is positive or negative and statistically significant.</p>
+<p><span class="math inline">\(y_{lc} = exp(\beta1*x1 + \beta2*x2)\)</span></p>
+<p>Of course just an estimate by itself doesn’t tell us much, so we need to calculate standard errors, confidence intervals and p-values to know whether the effect is positive or negative and statistically significant. We can interpret the difference <span class="math inline">\(exp(x_1) - exp(x_2)\)</span> as the difference in expected value of the response variable (suicide count in this case).</p>
+<p>Similarly, we can interpret the <strong>nonlinear combination</strong> of regression coefficients, <span class="math inline">\(exp(x1)/exp(x2)\)</span> as the ratio of the expected value of the response variable.</p>
 </div>
 <div id="why-is-it-useful" class="section level2">
 <h2><strong>Why is it useful?</strong></h2>
@@ -573,9 +574,7 @@ nlcom (E_gender:exp(_b[1.gender]))</code></pre>
 <div id="todo" class="section level1">
 <h1><strong>TODO</strong></h1>
 <ul>
-<li>We need to estimate non-linear combinations of coefficients, and add explanations of what those mean in the Introduction</li>
 <li>We need to add a conclusion/discussion, comparing and contrasting the tools that were used.</li>
-<li><strong>R:</strong> make the CI plots better by adjusting x-ticks and perhaps adding colors</li>
 </ul>
 </div>
 
