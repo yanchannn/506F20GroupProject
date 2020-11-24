@@ -17,6 +17,7 @@
 library(tidyverse)
 library(biostat3)
 library(doBy)
+library(msm)
 #base_wd = getwd()
 #dataset = read.csv(file.path(base_wd, "/506F20GroupProject/master.csv"))
 
@@ -63,8 +64,10 @@ lcom <- function(var_list, code_list, vcov_matrix=matrix) {
   intercept = model$coefficients[1]
   
   ## Find the estimate, lc_age_gender ##
-  lc_age_gender = Map('*', code_list, coefficients)
-  lc_age_gender = Reduce('+', lc_age_gender) + intercept
+  lc = Map('*', code_list, coefficients)
+  lc = Reduce('+', lc) + intercept
+  
+  lc = exp(lc)
   
   # Get the test statistic using a t distribution #
   alpha = 0.05
@@ -97,10 +100,10 @@ lcom <- function(var_list, code_list, vcov_matrix=matrix) {
   
   
   ## Find confidence intervals ##
-  lower = lc_age_gender - tcr*std_error
-  upper = lc_age_gender + tcr*std_error
+  lower = lc - tcr*std_error
+  upper = lc + tcr*std_error
   
-  remove_names = unname(c(lc_age_gender, std_error, lower, upper))
+  remove_names = unname(c(lc, std_error, lower, upper))
   names(remove_names) = c("estimate", "se", "lower", "upper")
   
   return(remove_names)
@@ -219,4 +222,22 @@ plot_ci <- function(dataset, xvar="estimate", yvar="type", lower="lower",
 # 
 # 
 # estimates = esticon(model, lambda1)
+
+
+
+
+
+
+# Non-linear combinations #
+
+# x1 corresponds to the coefficient of the intercept,
+# x2 with the next coefficient and so on #
+
+estimate = model$coefficients[[4]]/model$coefficients[[20]]
+
+non_lin_se = msm::deltamethod(~x4/x20, 
+                              coef(model), matrix)
+
+lower_CI = estimate - qnorm(0.975) * non_lin_se
+upper_CI = estimate + qnorm(0.975) * non_lin_se
 
