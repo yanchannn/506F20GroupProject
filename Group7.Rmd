@@ -20,12 +20,12 @@ need to look at linear and non-linear combinations. Consider a regression model
 with response variable y and predictor variables x1, x2, x3 and x4. The regression 
 model (without interactions) is:
 
-$y = \alpha + \beta1*x1 + \beta2*x2 + \beta3*x3 + \beta4*x4$
+$$y = \alpha + \beta1*x1 + \beta2*x2 + \beta3*x3 + \beta4*x4$$
 
 If we want to make inferences about the effect x1 and x2 have on y, we need to 
 create a linear combination of those variables
 
-$y_{lc} = \beta1*x1 + \beta2*x2$
+$$y_{lc} = \beta1*x1 + \beta2*x2$$
 
 Of course just an estimate by itself doesn't tell us much, so we need to calculate
 standard errors, confidence intervals and p-values to know whether the effect is 
@@ -148,6 +148,7 @@ bars for each pair of linear and non-linear combinations.
 
 We use the glm function in Python statsmodels with `family=sm.families.Poisson()`, 
 and use the logarithm of population as `offset` to fit the Poisson regression model. 
+
 For linear combination of the coefficients, the parameter estimates, standard errors 
 and the confidence intervals are obtained by retrieving the paramter array and covariance
 matrix from the fitted model. The results of the two subgroups are visualized by 
@@ -167,9 +168,57 @@ of coefficients.
 
 # **Core Analysis** {.tabset .tabset-pills}
 
+## R
+
+```{r linear_combinations, echo=FALSE, message=FALSE, warning=FALSE, fig.width=13, fig.height=7}
+
+
+# Construct the confidence interval figures
+source('R/core_example.R')
+
+      ## Create plots for each of the pairs of combinations ##
+
+# 25-34 males, 2005 vs 2015 #
+df1 = create_dataframe(male_25_34_2015, male_25_34_2005,
+                       "25-34 Males, 2015", "25-34 Males, 2005")
+
+plot_ci(dataset=df1)
+
+
+# 35-54 in 2015, male vs female #
+
+df2 = create_dataframe(male_35_54_2015, female_35_54_2015,
+                       "35-54 Males, 2015", "35-54 Females, 2015")
+
+plot_ci(dataset=df2)
+
+
+# male in 2015, 75+ vs 5-14 #
+
+df3 = create_dataframe(male_75_2015, male_5_14_2015,
+                       "75+ Males, 2015", "5-14 Males, 2015")
+
+plot_ci(dataset=df3)
+
+
+
+
+## Create the non-linear combination plot ##
+
+plot_ci(dataset=full_df, xlab = "NLC CI", ylab = "NLC groups",
+        title="Non-linear Combination (NLC) CI's -- 
+        product and ratio are described in the Introduction")
+
+```
+
+
+
+
+
+
 ## Python
 
-### Data clean 
+### Data cleaning 
 
 First we download data and do preprocessing. 
 
@@ -190,12 +239,11 @@ model = sm.GLM.from_formula(fml, offset=np.log(df['population']), data=df, famil
 res = model.fit()
 ```
 
-#### Linear Commbination of Coefficient: example 1 
+#### Linear Combination of Coefficient 
 
-In this example, we are trying to figure out the linear combination of 25-34 
-years old males in 2015 and linear combination of 25-34 years old males in 2005.
-The expected suicides counts, standard errors and confidence intervals are 
-computed using function `lcom`.
+This part explores the linear combination of coefficient. The expected suicides 
+counts, standard errors and 95% confidence intervals are computed using function `lcom`. 
+The results are visualized using `plot_comparison` function. 
 
 ```{python, echo=TRUE, eval=FALSE}
 def lcom(var_list, coeffs, cov_matrix, alpha=0.05):   
@@ -236,17 +284,64 @@ def lcom(var_list, coeffs, cov_matrix, alpha=0.05):
                            "upper": [np.exp(linear_est)+score*np.exp(linear_est)*np.sqrt(variance)]})
     
     return output
+    
+def plot_comparison(var_list1, var_list2):
+    # Function to generate bar plot of estimate and confidence interval
+    # Inputs: var_list1 - a list of 3 variables to compare
+    #         var_list2 - variable list with 1 different from var_list1
+    
+    common = list(set(var_list2).intersection(var_list1))
+    
+    df1 = lcom(var_list1, coeffs, cov_matrix, alpha=0.05)
+    df1.index = list(set(var_list1)-set(common))
+    df2 = lcom(var_list2, coeffs, cov_matrix, alpha=0.05)
+    df2.index = list(set(var_list2)-set(common))
+    df = df1.append(df2)
+    
+    est = np.array(df['estimate'])
+    ci = np.array([df1[['lower','upper']].values[0], df2[['lower','upper']].values[0]])
+
+    x_r = np.c_[est-ci[:,0],ci[:,1]-est].T
+    plt.figure(figsize=(15,4))
+    plt.barh(range(len(est)), est, xerr=x_r, fill=False, ecolor='r', capsize=20)
+    plt.xlabel('Linear combination of coefficients (95% CI)')
+    plt.yticks(range(len(est)), [str(lab) for lab in df.index])
+    plt.title(str(common))
+    plt.show()
+    
+    return df
 ```
 
-#### Linear Combination of Coefficient: example 2
+##### Example 1
+
+In this example, we are trying to figure out the linear combination of 25-34 
+years-old males in 2015 and linear combination of 25-34 years old males in 2005.
+
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/Python/Results/lin_year.jpg?raw=true){width=400px}
+
+##### Example 2
 
 In this example, we are trying to figure out the linear combination of 35-54 
-years-old males in 2015 and 35-54 years-old female in 2015.
+years-old males in 2015 and 35-54 years-old females in 2015.
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/Python/Results/lin_sex.jpg?raw=true){width=400px}
 
 
+##### Example 3
+
+In this example, we are trying to figure out the linear combination of 75+ 
+years-old males in 2015 and 5-14 years-old males in 2015.
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/Python/Results/lin_age.jpg?raw=true){width=400px}
 
 
-### Non-linear combination
+#### Non-linear Combination of Coefficient
+
+In this part, we will implement delta method in function `nlcom`to compute 
+the estimates, standard errors and 95% confidence intervals for non-linear combination 
+of the fitted coefficients. The non-linear combination we have used is `ratio` and 
+`product`.
 
 ```{python, echo=TRUE, eval=FALSE}
 def nlcom(var_list, coeffs, cov_matrix, alpha=0.05, method="ratio"):
@@ -308,48 +403,16 @@ def nlcom(var_list, coeffs, cov_matrix, alpha=0.05, method="ratio"):
 ```
 
 
-## R
+##### Example 1
 
-```{r linear_combinations, echo=FALSE, message=FALSE, warning=FALSE, fig.width=13, fig.height=7}
+Ratio between year 2000 and year 2010:
 
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/Python/Results/non_ratio.jpg?raw=true){width=400px}
 
-# Construct the confidence interval figures
-source('R/core_example.R')
+##### Example 2
+Product between male and year 2005:
 
-      ## Create plots for each of the pairs of combinations ##
-
-# 25-34 males, 2005 vs 2015 #
-df1 = create_dataframe(male_25_34_2015, male_25_34_2005,
-                       "25-34 Males, 2015", "25-34 Males, 2005")
-
-plot_ci(dataset=df1)
-
-
-# 35-54 in 2015, male vs female #
-
-df2 = create_dataframe(male_35_54_2015, female_35_54_2015,
-                       "35-54 Males, 2015", "35-54 Females, 2015")
-
-plot_ci(dataset=df2)
-
-
-# male in 2015, 75+ vs 5-14 #
-
-df3 = create_dataframe(male_75_2015, male_5_14_2015,
-                       "75+ Males, 2015", "5-14 Males, 2015")
-
-plot_ci(dataset=df3)
-
-
-
-
-## Create the non-linear combination plot ##
-
-plot_ci(dataset=full_df, xlab = "NLC CI", ylab = "NLC groups",
-        title="Non-linear Combination (NLC) CI's -- 
-        product and ratio are described in the Introduction")
-
-```
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/Python/Results/non_prod.jpg?raw=true){width=400px}
 
 
 
@@ -472,7 +535,7 @@ linear combination of coefficients seperately.
 
 #### Linear Combination of Coefficient: example 2
 
-In this example, we are trying to figure out the linear combination of 35-54 years-old males in 2015 and 35-54 years-old female in 2015.
+In this example, we are trying to figure out the linear combination of 35-54 years-old males in 2015 and 35-54 years-old females in 2015.
 
 In default, the baseline level for gender is female.
 ```{stata, echo = TRUE, eval = FALSE}
@@ -492,10 +555,11 @@ poisson count ib4.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 ![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l2_male.png?raw=true){width=450px}
 
 
-#### Linear Commbination of Coefficient: example 3
+#### Linear Combination of Coefficient: example 3
 
 In this example, we are trying to figure out the linear combination of 75+ years-old males in 2015 
-and 5-14 years-old female in 2015.
+and 5-14 years-old males in 2015.
+
 In default, the baseline level for gender is femle. So we don't need to specify 
 the reference level of gender.
 ```{stata, echo = TRUE, eval = FALSE}
@@ -505,14 +569,14 @@ the reference level of gender.
 poisson count ib6.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 ```
 
-![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l2_female.png?raw=true){width=450px}
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l3_75.png?raw=true){width=450px}
 
 ```{stata, echo = TRUE, eval = FALSE}
 *** 5-14 years-old males in 2015
 poisson count ib1.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 ```
 
-![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l2_male.png?raw=true){width=450px}
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l3_15.png?raw=true){width=450px}
 
 
 #### Non-linear Combination of Coefficient:
@@ -545,9 +609,26 @@ nlcom (E_ratio: exp(_b[2000.year] / _b[2010.year]))
 
 # **Conclusion/Discussion**
 
-There are some slight differences in the standard errors of the non-linear combinations between R and Python; this is most likely because R used the msm package's "deltamethod" function, while Python did the calculation manually. However, the differences are negligible (<0.005) and the estimates are the same.
+There are some slight differences in the standard errors of the non-linear 
+combinations between R and Python; this is most likely because R used the msm 
+package's "deltamethod" function, while Python did the calculation manually. 
+However, the differences are negligible (<0.005) and the estimates are the same.
 
-**Add discussion of the results -- which group has a higher effect etc.**
+From the examples presented in the three parallel sections, we can now draw some 
+conclusions based on the linear combination of coefficients obtained by Possion 
+regression model. First, males of 25-34 years old were less likely to commit suicide 
+in 2015 compared to 10 years ago. Second, in 2015, males had higher suicide 
+counts compared to females when they are both 35-54 years old. Finally, in 2015, 
+males of 75+ years old had higher suicide counts than males of 5-14 years old. 
+
+The non-linear combination of coefficient using ratio indicates that the suicide 
+counts in 2010 were less than 2000. Besides, the interaction of males group and 
+year 2005 results in a noticeble inrease in the suicide counts.
+
+We have also noticed that there are some discrepancies in the resulting standard 
+errors across the three computation tools. The main reason may result from their 
+difference in implementing delta method.
+
 
 # **Reference**
 
