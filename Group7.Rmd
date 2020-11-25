@@ -95,7 +95,7 @@ To plot confidence intervals we used the ggplot package and plotted horizontal e
 
 ### **Python**
 
-We use the glm function in Python statsmodels with `family=sm.families.Poisson()`, and use the logarithm of population as `offset` to fit the Poisson regression model. For linear combination of the coefficients, the parameter estimates, standard errors and the confidence intervals are obtained by retrieving the paramter array and covariance matrix from the fitted model. The results of the two subgroups are visualized by `matplotlib.pyplot`.
+We use the glm function in Python statsmodels with `family=sm.families.Poisson()`, and use the logarithm of population as `offset` to fit the Poisson regression model. For linear combination of the coefficients, the parameter estimates, standard errors and the confidence intervals are obtained by retrieving the paramter array and covariance matrix from the fitted model. The results of the two subgroups are visualized by `matplotlib.pyplot`. The non-linear combination of the coefficients are computed by delta method.
 
 ### **Stata**
 
