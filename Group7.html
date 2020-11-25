@@ -773,7 +773,7 @@ nlcom (E_ratio: exp(_b[2000.year] / _b[2010.year]))</code></pre>
 <p>There are some slight differences in the standard errors of the non-linear combinations between R and Python; this is most likely because R used the msm package’s “deltamethod” function, while Python did the calculation manually. However, the differences are negligible (&lt;0.005) and the estimates are the same.</p>
 <p>From the examples presented in the three parallel sections, we can now draw some conclusions based on the linear combination of coefficients obtained by Possion regression model. First, males of 25-34 years old were less likely to commit suicide in 2015 compared to 10 years ago. Second, in 2015, males had higher suicide counts compared to females when they are both 35-54 years old. Finally, in 2015, males of 75+ years old had higher suicide counts than males of 5-14 years old.</p>
 <p>The non-linear combination of coefficient using ratio indicates that the suicide counts in 2010 were less than 2000. Besides, the interaction of males group and year 2005 results in a noticeble inrease in the suicide counts.</p>
-<p>We have also noticed that there are some discrepancies in the resulting standard errors across the three computation tools. The main reason may result from their difference in implementing delta method.</p>
+<p>We have also noticed that there are small discrepancies in the resulting standard errors across the three computation tools. The main reason may result from their difference in implementing delta method. In R and Python sections, the standard errors for linear combination of coefficients are also computed using delta method.</p>
 </div>
 <div id="reference" class="section level1">
 <h1><strong>Reference</strong></h1>
