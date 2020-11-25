@@ -6,7 +6,7 @@
 ##  
 ##
 ## Author: Aravind Mantravadi, amantrav@umich.edu
-## Updated: November 13, 2020
+## Updated: November 24, 2020
 
 #! Limit lines to 79 characters with rare exceptions. 
 # 79: -------------------------------------------------------------------------
@@ -15,8 +15,6 @@
     ## Import libraries ##
 
 library(tidyverse)
-library(biostat3)
-library(doBy)
 library(msm)
 #base_wd = getwd()
 #dataset = read.csv(file.path(base_wd, "/506F20GroupProject/master.csv"))
@@ -79,24 +77,27 @@ lcom <- function(var_list, code_list, vcov_matrix=matrix) {
   ## First get sum of the Var(i) terms
   
   intercept_variance = vcov_matrix["(Intercept)", "(Intercept)"]
-  variances = code_list[1]^2*vcov_matrix[var_list[1], var_list[1]] + 
-    code_list[2]^2*vcov_matrix[var_list[2], var_list[2]] + 
-    code_list[2]^2*vcov_matrix[var_list[3], var_list[3]] + 
-    intercept_variance
+  variances = code_list[1]^2*vcov_matrix[var_list[1], var_list[1]] +
+   code_list[2]^2*vcov_matrix[var_list[2], var_list[2]] +
+   code_list[2]^2*vcov_matrix[var_list[3], var_list[3]] +
+   intercept_variance
   
   
   ## Sum of covariance terms
-  covariance = 2*code_list[1]*vcov_matrix["(Intercept)", var_list[1]] + 
-    2*code_list[2]*vcov_matrix["(Intercept)", var_list[2]] + 
-    2*code_list[3]*vcov_matrix["(Intercept)", var_list[3]] + 
-    2*code_list[1]*code_list[2]*vcov_matrix[var_list[1], var_list[2]] + 
-    2*code_list[1]*code_list[3]*vcov_matrix[var_list[1], var_list[3]] + 
+  covariance = 2*code_list[1]*vcov_matrix["(Intercept)", var_list[1]] +
+    2*code_list[2]*vcov_matrix["(Intercept)", var_list[2]] +
+    2*code_list[3]*vcov_matrix["(Intercept)", var_list[3]] +
+    2*code_list[1]*code_list[2]*vcov_matrix[var_list[1], var_list[2]] +
+    2*code_list[1]*code_list[3]*vcov_matrix[var_list[1], var_list[3]] +
     2*code_list[2]*code_list[3]*vcov_matrix[var_list[2], var_list[3]]
+  
 
   
+  # final_variance = variances + covariance
   final_variance = variances + covariance
   
-  std_error = sqrt(final_variance)
+  #std_error = sqrt(final_variance)
+  std_error = lc*sqrt(final_variance)
   
   
   ## Find confidence intervals ##
@@ -169,61 +170,8 @@ plot_ci <- function(dataset, xvar="estimate", yvar="type", lower="lower",
     geom_point(position = position_dodge(width = 0.4)) +
     geom_errorbarh(aes_string(xmin = lower, xmax = upper),
                    position = position_dodge(width = 0.4)) +
-    labs(x = xlab, y = ylab) + ggtitle("Linear Combination (LC) CI")
+    labs(x = xlab, y = ylab) + ggtitle(title)
 }
-
-
-# 
-#       ## Create plots for each of the pairs of combinations ##
-# 
-# 
-# # 25-34 males, 2005 vs 2015 #
-# df1 = create_dataframe(male_25_34_2015, male_25_34_2005,
-#                        "25-34 Males, 2015", "25-34 Males, 2005")
-# 
-# plot_ci(dataset=df1)
-# 
-# 
-# # 35-54 in 2015, male vs female #
-# 
-# df2 = create_dataframe(male_35_54_2015, female_35_54_2015,
-#                        "35-54 Males, 2015", "35-54 Females, 2015")
-# 
-# plot_ci(dataset=df2)
-# 
-# 
-# # male in 2015, 75+ vs 5-14 #
-# 
-# df3 = create_dataframe(male_75_2015, male_5_14_2015,
-#                        "75+ Males, 2015", "5-14 Males, 2015")
-# 
-# plot_ci(dataset=df3)
-
-
-
-
-
-## Check results using lincom and esticon;
-## The confidence intervals match
-
-
-#lin_comb = lincom(model, "(Intercept) + 1*sexmale + 1*age25-34 years + 1*year2015")
-
-
-##  TESTING ESTICON FUNCTION ##
-    # Answers match #
-# 
-# 
-# lambda1 = integer(39)
-# lambda1[1] = 1 # set intercept
-# lambda1[33] = 1 # set sexmale = 1
-# lambda1[34] = 1 # set age25-34 years = 1
-# lambda1[31] = 1 # set year2015 = 1
-# 
-# 
-# estimates = esticon(model, lambda1)
-
-
 
 
 
@@ -233,11 +181,54 @@ plot_ci <- function(dataset, xvar="estimate", yvar="type", lower="lower",
 # x1 corresponds to the coefficient of the intercept,
 # x2 with the next coefficient and so on #
 
-estimate = model$coefficients[[4]]/model$coefficients[[20]]
+nlcom <- function(nltype, model){
+  # Function to find the non linear combination using the msm package
+  # nltype is a string: "ratio" or "product"
+  # Output is a vector of the estimate, std deviation, lower and upper CI
+  
+  if (nltype == "product"){
+    # est = model$coefficients[["(Intercept)"]] + 
+    #   model$coefficients[["sexmale"]]*model$coefficients[["year2005"]]
+    
+    est = model$coefficients[["sexmale"]]*model$coefficients[["year2005"]]
+    
+    est = exp(est)
+    se = msm::deltamethod(~x1 + (x33*x21), coef(model), matrix)
+    lower_CI = est - qnorm(0.975)*se
+    upper_CI = est + qnorm(0.975)*se
+    
+    final = c("estimate" = est, "se" = se, 
+              "lower" = lower_CI, "upper" = upper_CI)
+    
+    return(final)
+  } else {
+    
+    # est_ratio = model$coefficients[["(Intercept)"]] + 
+    #   model$coefficients[["year2000"]]/model$coefficients[["year2010"]]
+    
+    est = model$coefficients[["year2000"]]/model$coefficients[["year2010"]]
+    est = exp(est)
+    
+    se = msm::deltamethod(~exp(x1 + (x16/x26)), coef(model), matrix)
+    
+    lower_CI = est - qnorm(0.975) * se
+    upper_CI = est + qnorm(0.975) * se
+    
+    final = c("estimate" = est, "se" = se, 
+              "lower" = lower_CI, "upper" = upper_CI)
+    
+    return(final)
+  }
+}
 
-non_lin_se = msm::deltamethod(~x4/x20, 
-                              coef(model), matrix)
 
-lower_CI = estimate - qnorm(0.975) * non_lin_se
-upper_CI = estimate + qnorm(0.975) * non_lin_se
+product = nlcom("product", model)
+ratio = nlcom("ratio", model)
+
+
+full_df = data.frame(estimate = c(product[["estimate"]], ratio[["estimate"]]),
+                     se = c(product[["se"]], ratio[["se"]]),
+                     lower = c(product[["lower"]], ratio[["lower"]]),
+                     upper = c(product[["upper"]], ratio[["upper"]]),
+                     type = c("product", "ratio"))
 
