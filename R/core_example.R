@@ -175,7 +175,6 @@ plot_ci <- function(dataset, xvar="estimate", yvar="type", lower="lower",
 
 
 
-
 # Non-linear combinations #
 
 # x1 corresponds to the coefficient of the intercept,
@@ -193,7 +192,7 @@ nlcom <- function(nltype, model){
     est = model$coefficients[["sexmale"]]*model$coefficients[["year2005"]]
     
     est = exp(est)
-    se = msm::deltamethod(~x1 + (x33*x21), coef(model), matrix)
+    se = msm::deltamethod(~exp(x33*x21), coef(model), matrix)
     lower_CI = est - qnorm(0.975)*se
     upper_CI = est + qnorm(0.975)*se
     
@@ -209,10 +208,10 @@ nlcom <- function(nltype, model){
     est = model$coefficients[["year2000"]]/model$coefficients[["year2010"]]
     est = exp(est)
     
-    se = msm::deltamethod(~exp(x1 + (x16/x26)), coef(model), matrix)
+    se = msm::deltamethod(~exp(x16/x26), coef(model), matrix)
     
-    lower_CI = est - qnorm(0.975) * se
-    upper_CI = est + qnorm(0.975) * se
+    lower_CI = est - qnorm(0.975)*se
+    upper_CI = est + qnorm(0.975)*se
     
     final = c("estimate" = est, "se" = se, 
               "lower" = lower_CI, "upper" = upper_CI)
