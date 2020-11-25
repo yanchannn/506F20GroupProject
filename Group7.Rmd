@@ -192,7 +192,7 @@ replace gender = 0 if sex == "female"
 label define gender_label 0 "Female" 1 "Male" , replace
 label values gender gender_label
 
-* conveert gdp to numeric
+* convert gdp to numeric
 destring gdp, replace ignore(",")
 
 * convert age from string to categorical
@@ -222,7 +222,7 @@ list in 1/5
 ![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/head.png?raw=true){width=400px}
 
 ### Summary Table
-To have a glance of the data distributions related to variables gender and age group.
+To take a glance of the data distributions related to variables gender and age group.
 ```{stata, echo = TRUE, eval = FALSE}
 tabstat count, by(gender) stats(mean sd n)
 ```
@@ -246,11 +246,11 @@ instead of log incident rate ratios.
 #### Linear Commbination of Coefficient: example 1
 
 In this example, we are trying to figure out the linear combination of coefficients 25-34 
-years old males in 2015 and coefficient of 25-34 years old males in 2005.
+years-old males in 2015 and coefficient of 25-34 years-old males in 2005.
 We can change the base level to these two linear combinations separately and
 get the estimated baseline incidence rate from `_cons` in outputs and its se as well as CI.
 
-To set the base level of poisson regression model, we only need to specify the 
+To set the base level of Poisson regression model, we only need to specify the 
 level between `ib` and `.var` in the poisson formula. For example, in the
 following example, I set the reference level of age group to be 25-34 which is 
 coded as 3, I specify it as `ib3.age_group` in the formula.
