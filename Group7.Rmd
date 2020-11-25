@@ -625,7 +625,7 @@ males of 75+ years old had higher suicide counts than males of 5-14 years old.
 
 The non-linear combination of coefficient using ratio indicates that the suicide 
 counts in 2010 were less than 2000. Besides, the interaction of males group and 
-year 2005 results in a noticeble inrease in the suicide counts.
+year 2005 results in a noticeable increase in the suicide counts.
 
 We have also noticed that there are small discrepancies in the resulting standard 
 errors across the three computation tools. The main reason may result from their 
