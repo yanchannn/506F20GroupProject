@@ -94,9 +94,10 @@ Similarly, we use the glm function in Python statsmodels to fit the Poisson regr
 
 We can fit the Poisson regression using `poisson` in Stata and use option 
 `offset` to set an offset or use `exposure` which is equivalent to adding 
-`offset(log_var)`. To get the estimated linear combination of coefficients, we 
-can use `lincom`. It will output the point estimates, standard errors, t or z statistics, p-values, and confidence intervals. Similarly, we can use `nlcom` to
-get the results for non-linear combination of coefficients.
+`offset(log_var)`. To get the estimated linear combination of coefficients, we can use `lincom`. It will output the point estimates, standard errors, t or z statistics, p-values, and confidence intervals.
+Or simply set the linear combination to the reference level and get the
+reults from the output of `poisson` function.Similarly, we can use `nlcom` 
+to get the results for non-linear combination of coefficients.
 
 # **Core Analysis** {.tabset .tabset-pills}
 
@@ -190,6 +191,12 @@ drop sex age
 save cleaned.dta, replace
 use cleaned, clear 
 ```
+
+We can have a look at the cleaned data:
+```{stata, echo = TRUE, eval = FALSE}
+list in 1/5
+```
+
 
 ### Summary Table
 ```{stata, echo = TRUE, eval = FALSE}
