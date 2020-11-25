@@ -394,7 +394,6 @@ summary {
 </ul></li>
 </ul></li>
 <li><a href="#conclusiondiscussion"><strong>Conclusion/Discussion</strong></a></li>
-<li><a href="#todo"><strong>TODO</strong></a></li>
 </ul>
 </div>
 
@@ -407,7 +406,7 @@ summary {
 <p>If we want to make inferences about the effect x1 and x2 have on y, we need to create a linear combination of those variables</p>
 <p><span class="math inline">\(y_{lc} = exp(\beta1*x1 + \beta2*x2)\)</span></p>
 <p>Of course just an estimate by itself doesn’t tell us much, so we need to calculate standard errors, confidence intervals and p-values to know whether the effect is positive or negative and statistically significant. We can interpret the difference <span class="math inline">\(exp(lc1) - exp(lc2)\)</span> as the difference in expected value of the response variable (suicide count in this case), where <span class="math inline">\(lc1\)</span> and <span class="math inline">\(lc2\)</span> are linear combinations of the predictor variables</p>
-<p>Similarly, we can interpret the <strong>nonlinear combination</strong> of regression coefficients, <span class="math inline">\(exp(x1/x2)\)</span> as the ratio of the expected value of the response variable, where <span class="math inline">\(x1\)</span> and <span class="math inline">\(x2\)</span> are predictor variables.</p>
+<p>Similarly, we can interpret the <strong>nonlinear combination</strong> of regression coefficients, <span class="math inline">\(exp(x1/x2)\)</span> as the ratio of the expected value of the response variable, where <span class="math inline">\(x1\)</span> and <span class="math inline">\(x2\)</span> are predictor variables. We can also estimate the coefficient of <span class="math inline">\(exp(x1*x2)\)</span>.</p>
 </div>
 <div id="why-is-it-useful" class="section level2">
 <h2><strong>Why is it useful?</strong></h2>
@@ -568,7 +567,7 @@ poisson count ib1.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 </div>
 <div id="non-linear-combination-of-coefficient" class="section level4">
 <h4>Non-linear Combination of Coefficient:</h4>
-<p>We may also curiouos about the non linear combinations such as products or ratio of two coefficients. We can use <code>nlcom</code> function. The notation <code>_b[name]</code> is the standard way in Stata to refer to regression coefficients. We can give the combination a name showing as below: I named this combination as <code>E_product</code> followed by a comma and then the expression.</p>
+<p>We may also curious about the non linear combinations such as products or ratio of two coefficients. We can use <code>nlcom</code> function. The notation <code>_b[name]</code> is the standard way in Stata to refer to regression coefficients. We can give the combination a name showing as below: I named this combination as <code>E_product</code> followed by a comma and then the expression.</p>
 <pre class="stata"><code>** Coefficient estimates of male * year_2015
 poisson count ib2.age_group i.gender i.year gdp, exposure(population) irr
 nlcom (E_product: exp(_b[1.gender] * _b[2005.year] ))</code></pre>
@@ -583,13 +582,6 @@ nlcom (E_ratio: exp(_b[2000.year] / _b[2010.year]))</code></pre>
 </div>
 <div id="conclusiondiscussion" class="section level1">
 <h1><strong>Conclusion/Discussion</strong></h1>
-<p>TODO</p>
-</div>
-<div id="todo" class="section level1">
-<h1><strong>TODO</strong></h1>
-<ul>
-<li>We need to add a conclusion/discussion, comparing and contrasting the tools that were used.</li>
-</ul>
 </div>
 
 

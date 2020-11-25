@@ -20,7 +20,8 @@ $y_{lc} = exp(\beta1*x1 + \beta2*x2)$
 
 Of course just an estimate by itself doesn't tell us much, so we need to calculate standard errors, confidence intervals and p-values to know whether the effect is positive or negative and statistically significant. We can interpret the difference $exp(lc1) - exp(lc2)$ as the difference in expected value of the response variable (suicide count in this case), where $lc1$ and $lc2$ are linear combinations of the predictor variables
 
-Similarly, we can interpret the **nonlinear combination** of regression coefficients, $exp(x1/x2)$ as the ratio of the expected value of the response variable, where $x1$ and $x2$ are predictor variables.
+Similarly, we can interpret the **nonlinear combination** of regression coefficients, $exp(x1/x2)$ as the ratio of the expected value of the response variable, where $x1$ and $x2$ are predictor variables. We can also estimate
+the coefficient of $exp(x1*x2)$.
 
 ## **Why is it useful?**
 
@@ -288,7 +289,7 @@ poisson count ib1.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 
 #### Non-linear Combination of Coefficient:
 
-We may also curiouos about the non linear combinations such as products or ratio
+We may also curious about the non linear combinations such as products or ratio
 of two coefficients. We can use `nlcom` function. The notation `_b[name]` is the standard way in Stata to refer to regression coefficients. We can give the
 combination a name showing as below: I named this combination as `E_product` 
 followed by a comma and then the expression.
@@ -312,11 +313,4 @@ nlcom (E_ratio: exp(_b[2000.year] / _b[2010.year]))
 
 # **Conclusion/Discussion**
 
-TODO
-
-
-
-# **TODO**
-
-* We need to add a conclusion/discussion, comparing and contrasting the tools that were used.
 
