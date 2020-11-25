@@ -2,17 +2,14 @@
 Stats 506 F20 Group Project -- Group 7
 
 
-## Navigating the repo
+## Code organization
 
-* The full core example with outputs and figures can be found in Group7.html
-* The source code for:
-  + R: [R](https://github.com/aravind1338/506F20GroupProject/tree/main/R) folder
-  + Stata: [Stata](https://github.com/aravind1338/506F20GroupProject/tree/main/STATA) folder
-  + Python: [Python](https://github.com/aravind1338/506F20GroupProject/tree/main/Python) folder
-
-* The dataset is in [master.csv](https://github.com/aravind1338/506F20GroupProject/blob/main/master.csv)
-
-
+- `Group7.Rmd`, `Group.html`: the write-up for this project
+- `master.csv`: the dataset downloaded from [Kaggle](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016)
+- The source code for:
+   + R: [R](https://github.com/aravind1338/506F20GroupProject/tree/main/R) folder
+   + Stata: [Stata](https://github.com/aravind1338/506F20GroupProject/tree/main/STATA) folder
+   + Python: [Python](https://github.com/aravind1338/506F20GroupProject/tree/main/Python) folder
 
 ## Group members:
 
@@ -23,14 +20,26 @@ Stats 506 F20 Group Project -- Group 7
 [Yingyi Yang](https://github.com/YingyiYang/Stats506_public): Python
 
 
-
 ## Overview
 
 Regression models tell us about the effect of predictor variables on the response variable, but to find out the effect of specific predictors on the response, we need to use linear combinations and draw inferences.
 
-## Dataset
+## Data description
 
 The 1985-2006 Suicide Rate data for 101 different countries and 6 age groups, found on [Kaggle](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016)
+
+Key variables: 
+
+|  Variable               | Description                                         |
+| ----------------------- | ----------------------------------------------------|
+| `country` | 101 unique countries                  |
+|`year`        | 1985 ~ 2016                                |
+|`sex`          | female, male                                |
+|`age`          | 5-14 years, 15-24 years, 25-34 years, 35-54 years, 55-74 years, 75+ years |
+|`suicides_no` | suicides count  |
+|`population`   | population of each subgroup |
+|`gdp_per_capita`| gdp per capita |
+
 
 ## Core Examples
 
@@ -46,4 +55,8 @@ To answer these questions, we will build a poisson regression model and explore 
 
 ### Non-linear combinations
 
-TODO
+* Are the expected suicide counts in a particular year larger than another year?
+* What are the expected suicide counts when the interaction between two subgroups are considered?
+
+To answer these questions, we have implemented delta method to compute the effect of age, gender and year on the suicide count using non-linear combinations, i.e. the ratio and product of the pair in comparison. 
+
