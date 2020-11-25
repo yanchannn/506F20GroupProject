@@ -16,15 +16,14 @@
 
 library(tidyverse)
 library(msm)
-#base_wd = getwd()
-#dataset = read.csv(file.path(base_wd, "/506F20GroupProject/master.csv"))
 
 dataset = read.csv(file="master.csv")
 
 
+           #### DATA CLEANING ####
 
-# variable transormation
-## create factor levels for age, sex and year
+# variable transformation
+# create factor levels for age, sex and year
 dataset$age = factor(dataset$age)
 dataset$sex = factor(dataset$sex)
 dataset$year = factor(dataset$year)
@@ -36,7 +35,7 @@ model = glm(suicides_no ~ year + sex + age + gdp_per_capita...., offset
             = log(population),
             family = poisson(link = "log"), data=dataset)
 
-#summary(model)
+
 
 
         ##  Find estimates, std error and confidence intervals ##
@@ -230,4 +229,17 @@ full_df = data.frame(estimate = c(product[["estimate"]], ratio[["estimate"]]),
                      lower = c(product[["lower"]], ratio[["lower"]]),
                      upper = c(product[["upper"]], ratio[["upper"]]),
                      type = c("product", "ratio"))
+
+
+
+round_df <- function(x, digits) {
+  # function to round all numeric variables in a dataframe
+  # x: data frame 
+  # digits: number of digits to round
+  numeric_columns <- sapply(x, mode) == 'numeric'
+  x[numeric_columns] <-  round(x[numeric_columns], digits)
+  return(x)
+}
+
+
 

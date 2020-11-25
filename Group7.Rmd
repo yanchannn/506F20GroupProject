@@ -172,15 +172,17 @@ of coefficients.
 
 ```{r linear_combinations, echo=TRUE, message=FALSE, warning=FALSE, fig.width=13, fig.height=7}
 
-
-# Construct the confidence interval figures
+    ## The source code is in R/core_example.R ##
 source('R/core_example.R')
 
-      ## Create plots for each of the pairs of combinations ##
+
+
+    ## Create tables for the linear and non-linear combination data##
 
 # 25-34 males, 2005 vs 2015 #
 df1 = create_dataframe(male_25_34_2015, male_25_34_2005,
                        "25-34 Males, 2015", "25-34 Males, 2005")
+df1 = round_df(df1, 5)
 
 DT::datatable(df1)
 
@@ -190,6 +192,8 @@ DT::datatable(df1)
 df2 = create_dataframe(male_35_54_2015, female_35_54_2015,
                        "35-54 Males, 2015", "35-54 Females, 2015")
 
+df2 = round_df(df2, 5)
+
 DT::datatable(df2)
 
 
@@ -198,12 +202,14 @@ DT::datatable(df2)
 df3 = create_dataframe(male_75_2015, male_5_14_2015,
                        "75+ Males, 2015", "5-14 Males, 2015")
 
+df3 = round_df(df3, 5)
 DT::datatable(df3)
 
 
 ## Create the non-linear combination  ##
-
+full_df = round_df(full_df, 2)
 DT::datatable(full_df)
+
 
 ```
 
