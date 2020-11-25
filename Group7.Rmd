@@ -170,7 +170,7 @@ of coefficients.
 
 ## R
 
-```{r linear_combinations, echo=FALSE, message=FALSE, warning=FALSE, fig.width=13, fig.height=7}
+```{r linear_combinations, echo=TRUE, message=FALSE, warning=FALSE, fig.width=13, fig.height=7}
 
 
 # Construct the confidence interval figures
@@ -182,7 +182,7 @@ source('R/core_example.R')
 df1 = create_dataframe(male_25_34_2015, male_25_34_2005,
                        "25-34 Males, 2015", "25-34 Males, 2005")
 
-plot_ci(dataset=df1)
+DT::datatable(df1)
 
 
 # 35-54 in 2015, male vs female #
@@ -190,7 +190,7 @@ plot_ci(dataset=df1)
 df2 = create_dataframe(male_35_54_2015, female_35_54_2015,
                        "35-54 Males, 2015", "35-54 Females, 2015")
 
-plot_ci(dataset=df2)
+DT::datatable(df2)
 
 
 # male in 2015, 75+ vs 5-14 #
@@ -198,16 +198,12 @@ plot_ci(dataset=df2)
 df3 = create_dataframe(male_75_2015, male_5_14_2015,
                        "75+ Males, 2015", "5-14 Males, 2015")
 
-plot_ci(dataset=df3)
+DT::datatable(df3)
 
 
+## Create the non-linear combination  ##
 
-
-## Create the non-linear combination plot ##
-
-plot_ci(dataset=full_df, xlab = "NLC CI", ylab = "NLC groups",
-        title="Non-linear Combination (NLC) CI's -- 
-        product and ratio are described in the Introduction")
+DT::datatable(full_df)
 
 ```
 
