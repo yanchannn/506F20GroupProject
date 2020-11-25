@@ -16,9 +16,7 @@ $y = \alpha + \beta1*x1 + \beta2*x2 + \beta3*x3 + \beta4*x4$
 
 If we want to make inferences about the effect x1 and x2 have on y, we need to create a linear combination of those variables
 
-$y_{lc} = exp(\alpha + \beta1*x1 + \beta2*x2)$
-
-Of course just an estimate by itself doesn't tell us much, so we need to calculate standard errors, confidence intervals and p-values to know whether the effect is positive or negative and statistically significant. We can interpret the difference $exp(lc1) - exp(lc2)$ as the difference in expected value of the response variable (suicide count in this case), where $lc1$ and $lc2$ are linear combinations of the predictor variables
+$y_{lc} = \beta1*x1 + \beta2*x2$
 
 
 ## **Why is it useful?**
@@ -46,10 +44,13 @@ and draw inferences based on the estimates, confidence intervals and p-values ob
 
 # **Outline** 
 
-This project mainly includes exploratory data analysis, model fitting, linear and nonlinear combination investigation using three statistical analysis tools: R, Python and Stata. The results are also visualized by the corresponding packages in these tools. 
+This project mainly includes exploratory data analysis, model fitting, linear and nonlinear combination investigation using 
+three statistical analysis tools: R, Python and Stata. The results are also visualized by the corresponding packages in these tools. 
 
 ## **Data Description**
-In this tutorial, we use the [1985-2016 Suicide Rates Overview Data](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016) which can be download from [Kaggle](https://www.kaggle.com). It is a compiled dataset pulled from four other datasets linked by time and place. It has 27820 records in total. The target variables we are going to analyze are:
+In this tutorial, we use the [1985-2016 Suicide Rates Overview Data](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016) 
+which can be download from [Kaggle](https://www.kaggle.com). It is a compiled dataset pulled from four other datasets 
+linked by time and place. It has 27820 records in total. The target variables we are going to analyze are:
 
 `country`: country of the suicide records; 101 in total; countries in America and Europe occupy the majority 
 
@@ -68,15 +69,19 @@ In this tutorial, we use the [1985-2016 Suicide Rates Overview Data](https://www
 
 ## **Model fitting**
 
-Since the response variable `suicides_no` is count based, we have fitted a Poisson regression model with `year`, `sex`, `age`, `gdp_per_capita` as the predictors. Basically, we want to maximize the joint likelihood function below
+Since the response variable `suicides_no` is count based, we have fitted a Poisson regression model with `year`, `sex`, `age`, 
+`gdp_per_capita` as the predictors. Basically, we want to maximize the joint likelihood function below
 
 $$L(\beta) = \prod_{i=1}^n \frac{\lambda_i^{y_i} e^{-\lambda_i}}{y_i!}$$ 
 
-where $\lambda_i$ is the event rate for ith sample and is calculated using the link function $\lambda_i = e^{x_i \beta}$. The log-likelihood function for the Poisson regression model is 
+where $\lambda_i$ is the event rate for ith sample and is calculated using the link function $\lambda_i = e^{x_i \beta}$. 
+The log-likelihood function for the Poisson regression model is 
 
 $$\ln L(\beta) = \sum_{i=1}^n (y_ix_i\beta-e^{x_i\beta}-\ln{y_i!})$$
 
-After differentiating this log-likelihood equation with respect to $\beta$ and set to zero, we can get $\sum_{i=1}^n (y_i-e^{x_i\beta})x_i = 0$. Solving this equation for the regression coefficients $\beta$ $will yield the Maximum Likelihood Estimate (MLE) for $\beta$.
+After differentiating this log-likelihood equation with respect to $\beta$ and set to zero, 
+we can get $\sum_{i=1}^n (y_i-e^{x_i\beta})x_i = 0$. Solving this equation for the regression coefficients $\beta$ 
+will yield the Maximum Likelihood Estimate (MLE) for $\beta$.
 
 ## **Software and Tools used**
 
@@ -84,9 +89,12 @@ We will demonstrate our core example in 3 programming languages: R, Python and S
 
 ### **R**
 
-To fit a Poisson regression model, we use the glm function in R. We use `log(population)` as the offset, `year`, `sex`, `age`, `gdp_per_capita` as the predictor variables and `suicide_count` as the response variable.
+To fit a Poisson regression model, we use the glm function in R. We use `log(population)` as the offset, `year`, 
+`sex`, `age`, `gdp_per_capita` as the predictor variables and `suicide_count` as the response variable.
 
-While R has an `esticon` function in the `doBy` package that calculates estimates, standard errors, confidence intervals and p-values for the desired linear combination, we did them by hand (and verified them using `esticon`). The vcov() function came in handy to store the variance-covariance matrix of the regression model.
+While R has an `esticon` function in the `doBy` package that calculates estimates, standard errors, confidence intervals 
+and p-values for the desired linear combination, we did them by hand (and verified them using `esticon`). 
+The vcov() function came in handy to store the variance-covariance matrix of the regression model.
 
 For non-linear combinations, we used the `msm` package's `deltamethod` function to compute standard errors.
 
@@ -94,15 +102,20 @@ To plot confidence intervals we used the ggplot package and plotted horizontal e
 
 ### **Python**
 
-Similarly, we use the glm function in Python statsmodels to fit the Poisson regression model. The parameter estimates along with the confidence interval are obtained by retrieving the paramter array and covariance matrix from the fitted model. The results are visualized by matplotlib.pyplot.
+We use the glm function in Python statsmodels with `family=sm.families.Poisson()`, and use the logarithm of population 
+as `offset` to fit the Poisson regression model. For linear combination of the coefficients, the parameter estimates, 
+standard errors and the confidence intervals are obtained by retrieving the paramter array and covariance matrix from 
+the fitted model. The results of the two subgroups are visualized by `matplotlib.pyplot`. The non-linear combination 
+of the coefficients are computed by delta method.
 
 ### **Stata**
 
 We can fit the Poisson regression using `poisson` in Stata and use option 
 `offset` to set an offset or use `exposure` which is equivalent to adding 
-`offset(log_var)`. To get the estimated linear combination of coefficients, we can use `lincom`. It will output the point estimates, standard errors, t or z statistics, p-values, and confidence intervals.
+`offset(log_var)`. To get the estimated linear combination of coefficients, 
+we can use `lincom`. It will output the point estimates, standard errors, t or z statistics, p-values, and confidence intervals.
 Or simply set the linear combination to the reference level and get the
-reults from the output of `poisson` function.Similarly, we can use `nlcom` 
+results from the output of `poisson` function. Similarly, we can use `nlcom` 
 to get the results for non-linear combination of coefficients.
 
 # **Core Analysis** {.tabset .tabset-pills}
@@ -206,6 +219,7 @@ list in 1/5
 ![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/head.png?raw=true){width=400px}
 
 ### Summary Table
+To have a glance of the data distributions related to variables gender and age group.
 ```{stata, echo = TRUE, eval = FALSE}
 tabstat count, by(gender) stats(mean sd n)
 ```
@@ -221,58 +235,72 @@ tabstat count, by(age_group) stats(mean sd n)
 ### Analysis
 
 We can use function `poisson` to fit a Poisson regression model. 
-Option `exposure(population)` means add log(population) as an offset. We can
-also use option `offset(log_population)`. Option `irr` means to present the regression results as incident rate ratios.
+Option `exposure(population)` means set log(population) as an offset. We can
+also use option `offset(log_population)`. Option `irr` means to present the regression results as incident rate ratios 
+instead of log incident rate ratios.
 
 
 #### Linear Commbination of Coefficient: example 1
 
-In this example, we are trying to figure out the linear combination of 25-34 
-years old males in 2015 and linear combination of 25-34 years old males in 2005.
+In this example, we are trying to figure out the linear combination of coefficients 25-34 
+years old males in 2015 and coefficient of 25-34 years old males in 2005.
 We can change the base level to these two linear combinations separately and
-get the estimated baseline incidence rate and its se as well as CI.
+get the estimated baseline incidence rate from `_cons` in outputs and its se as well as CI.
 
 To set the base level of poisson regression model, we only need to specify the 
 level between `ib` and `.var` in the poisson formula. For example, in the
 following example, I set the reference level of age group to be 25-34 which is 
-coded as 3 in the data, I specify it as `ib3.age_group` in the formula.
+coded as 3, I specify it as `ib3.age_group` in the formula.
 
 ```{stata, echo = TRUE, eval = FALSE}
-** 25-34 males in 2015 vs 25-34 males 2005;  different year
+** 25-34 years-old males in 2015 vs 25-34 years-old males 2005;  different year
 ** Get the point estimates and CIs for two combinations separatly 
-*** 25-34 males in 2015
+*** 25-34 years-old males in 2015
 poisson count ib3.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 ```
 
 ![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l1_2015.png?raw=true){width=450px}
 
 ```{stata, echo = TRUE, eval = FALSE}
-*** 25-34 males in 2005
+*** 25-34 years-old males in 2005
 poisson count ib3.age_group ib1.gender ib2005.year gdp, exposure(population) irr
 ```
 
 ![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l1_2005.png?raw=true){width=450px}
 
-`_cons` estimate the baseline incidence rate
+`_cons` estimate the baseline incidence rate and it will always appear at the almost end of the output.
+So I only cut the end parts of the output since it is too long to be fully shown here.
 The default levle of confidence interval is 95%, and we don't specify it in our model. 
 
+From the two results we can notice that there is actually not much difference between these two groups. We can
+also use `lincom` function to calculate the linear combination of coefficients. If we want to calculate the 
+estimated difference between coefficient 2015.year and 2005.year for 25-34 years old males, we can have 
+
+```{stata, echo = TRUE, eval = FALSE}
+// change the base level of age to 24-34 years-old and base level of gender to male and fit a Poisson model
+poisson count ib3.age_group ib1.gender i.year gdp, exposure(population) irr
+lincom 2015.year - 2005.year, irr 
+```
+In order to make this project results consistent, I didn't use `lincom` here since my group members found it was
+hard to do the same thing in R and Python. So we reached to an agreement that we only calculate the estimated 
+linear combination of coefficients seperately.
 
 #### Linear Combination of Coefficient: example 2
 
 In this example, we are trying to figure out the linear combination of 35-54 years-old males in 2015 and 35-54 years-old female in 2015.
 
-In default, the baseline level for gender is femle.
+In default, the baseline level for gender is female.
 ```{stata, echo = TRUE, eval = FALSE}
-** 35-54 males in 2015 vs 35-54 females 2015; different gender
+** 35-54 years-old males in 2015 vs 35-54 years-old  females 2015; different gender
 ** Get the point estimates and CIs for two combinations separatly 
-*** 35-54 females in 2015
+*** 35-54 years-old females in 2015
 poisson count ib4.age_group i.gender ib2015.year gdp, exposure(population) irr
 ```
 
 ![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l2_female.png?raw=true){width=450px}
 
 ```{stata, echo = TRUE, eval = FALSE}
-*** 35-54 males in 2015
+*** 35-54 years-old males in 2015
 poisson count ib4.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 ```
 
@@ -281,21 +309,21 @@ poisson count ib4.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 
 #### Linear Commbination of Coefficient: example 3
 
-In this example, we are trying to figure out the linear combination of 75+ years-old males in 2015 and 5-14 years-old female in 2015.
-
+In this example, we are trying to figure out the linear combination of 75+ years-old males in 2015 
+and 5-14 years-old female in 2015.
 In default, the baseline level for gender is femle. So we don't need to specify 
 the reference level of gender.
 ```{stata, echo = TRUE, eval = FALSE}
-** 75+ males in 2015 vs 5-14 males in 2015; different age
+** 75+ years-old males in 2015 vs 5-14 years-old males in 2015; different age
 ** Get the point estimates and CIs for two combinations separatly 
-*** 75+ males in 2015 
+*** 75+ years-old males in 2015 
 poisson count ib6.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 ```
 
 ![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l2_female.png?raw=true){width=450px}
 
 ```{stata, echo = TRUE, eval = FALSE}
-*** 5-14 males in 2015
+*** 5-14 years-old males in 2015
 poisson count ib1.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 ```
 
@@ -304,9 +332,6 @@ poisson count ib1.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 
 #### Non-linear Combination of Coefficient:
 
-We may also curious about the non linear combinations such as products or ratio
-of two coefficients. We can use `nlcom` function. The notation `_b[name]` is the standard way in Stata to refer to regression coefficients. We can give the
-combination a name showing as below: I named this combination as `E_product` 
 followed by a comma and then the expression.
 
 ```{stata nonlinear_1, echo = TRUE, eval = FALSE}
@@ -329,3 +354,10 @@ nlcom (E_ratio: exp(_b[2000.year] / _b[2010.year]))
 # **Conclusion/Discussion**
 
 
+# **Reference**
+
+`lincom` manual in Stata: https://www.stata.com/manuals13/rlincom.pdf#rlincom
+
+`nlcom` manual in Stata: https://www.stata.com/manuals13/rnlcom.pdf
+
+Inferences on Linear Combinations of Coefficients in R: https://murraylax.org/econometrics/notes/regression_lincom.pdf
