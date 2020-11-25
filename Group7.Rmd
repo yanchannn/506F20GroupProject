@@ -14,7 +14,6 @@ output:
 # **Introduction**
 
 ## **Topic concepts**
-<<<<<<< HEAD
 Regression models tell us about the effect of predictor variables on the response variable, but to find out the effect of specific predictors on the response, we need to look at linear and non-linear combinations. Consider a regression model with response variable y and predictor variables x1, x2, x3 and x4. The regression model (without interactions) is:
 
 $y = \alpha + \beta1*x1 + \beta2*x2 + \beta3*x3 + \beta4*x4$
@@ -23,7 +22,7 @@ If we want to make inferences about the effect x1 and x2 have on y, we need to c
 
 $y_{lc} = \beta1*x1 + \beta2*x2$
 
-=======
+
 Regression models tell us about the effect of predictor variables on the response 
 variable, but to find out the effect of specific predictors on the response, we 
 need to look at linear and non-linear combinations. Consider a regression model 
@@ -49,7 +48,6 @@ Similarly, we can interpret the nonlinear combination of regression coefficients
 $exp(\beta1/\beta2)$ as the ratio of the expected value of the response variable, 
 where $\beta1$ and $\beta2$ are regression coefficients. We can also have nonlinear 
 transformation like $exp(\beta1 * \beta2)$ as the product of the coefficients.
->>>>>>> upstream/main
 
 ## **Why is it useful?**
 
@@ -615,8 +613,7 @@ nlcom (E_ratio: exp(_b[2000.year] / _b[2010.year]))
 
 # **Conclusion/Discussion**
 
-<<<<<<< HEAD
-=======
+
 There are some slight differences in the standard errors of the non-linear 
 combinations between R and Python; this is most likely because R used the msm 
 package's "deltamethod" function, while Python did the calculation manually. 
@@ -638,7 +635,6 @@ errors across the three computation tools. The main reason may result from their
 difference in implementing delta method. In R and Python sections, the standard 
 errors for linear combination of coefficients are also computed using delta method.
 
->>>>>>> upstream/main
 
 # **Reference**
 
