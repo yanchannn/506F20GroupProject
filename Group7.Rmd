@@ -7,9 +7,14 @@ output:
     toc: true
 ---
 
+```{r setup, include=FALSE}
+# 79: -------------------------------------------------------------------------
+```
+
 # **Introduction**
 
 ## **Topic concepts**
+<<<<<<< HEAD
 Regression models tell us about the effect of predictor variables on the response variable, but to find out the effect of specific predictors on the response, we need to look at linear and non-linear combinations. Consider a regression model with response variable y and predictor variables x1, x2, x3 and x4. The regression model (without interactions) is:
 
 $y = \alpha + \beta1*x1 + \beta2*x2 + \beta3*x3 + \beta4*x4$
@@ -18,12 +23,48 @@ If we want to make inferences about the effect x1 and x2 have on y, we need to c
 
 $y_{lc} = \beta1*x1 + \beta2*x2$
 
+=======
+Regression models tell us about the effect of predictor variables on the response 
+variable, but to find out the effect of specific predictors on the response, we 
+need to look at linear and non-linear combinations. Consider a regression model 
+with response variable y and predictor variables x1, x2, x3 and x4. The regression 
+model (without interactions) is:
+
+$$y = \alpha + \beta1*x1 + \beta2*x2 + \beta3*x3 + \beta4*x4$$
+
+If we want to make inferences about the effect x1 and x2 have on y, we need to 
+create a linear combination of those variables
+
+$$y_{lc} = \beta1*x1 + \beta2*x2$$
+
+Of course just an estimate by itself doesn't tell us much, so we need to calculate
+standard errors, confidence intervals and p-values to know whether the effect is 
+positive or negative and statistically significant. Since the Poisson regression 
+using a log-link function, the coefficients returned are log relative risk, we can 
+interpret the difference $exp(lc1) - exp(lc2)$ as the difference in expected value 
+of the response variable (suicide count in this case), where $lc1$ and $lc2$ are 
+linear combinations of the predictor variables.
+ 
+Similarly, we can interpret the nonlinear combination of regression coefficients, 
+$exp(\beta1/\beta2)$ as the ratio of the expected value of the response variable, 
+where $\beta1$ and $\beta2$ are regression coefficients. We can also have nonlinear 
+transformation like $exp(\beta1 * \beta2)$ as the product of the coefficients.
+>>>>>>> upstream/main
 
 ## **Why is it useful?**
 
-According to the World Health Organization (WHO), every year close to 800,000 people die due to suicide which is one person every 40 seconds. The results of survey conducted by WHO in 2016 shows that suicide the third leading cause of death in 15-19-year-olds. More than 79% of global suicides occurred in low and middle-income countries possibly due to pesticide self-poisoning in rural agricultural areas. Suicide is a global phenomenon and does not discriminate by age. The goal of this project is to demonstrate the use of Poisson regression in modeling suicide count data using demographic variables such as age and gender and make inferences on linear and non-linear combinations of regression coefficients.
+According to the World Health Organization (WHO), every year close to 800,000 
+people die due to suicide which is one person every 40 seconds. The results of 
+survey conducted by WHO in 2016 shows that suicide the third leading cause of death 
+in 15-19-year-olds. More than 79% of global suicides occurred in low and middle-income 
+countries possibly due to pesticide self-poisoning in rural agricultural areas. 
+Suicide is a global phenomenon and does not discriminate by age. The goal of this 
+project is to demonstrate the use of Poisson regression in modeling suicide count 
+data using demographic variables such as age and gender and make inferences on linear 
+and non-linear combinations of regression coefficients.
 
-For linear combinations, we will be comparing the effect of age, gender and year in three pairs, where each pair has two of the variables at the same level.
+For linear combinations, we will be comparing the effect of age, gender and year 
+in three pairs, where each pair has two of the variables at the same level.
 We will be looking at the effect of:
 
 1. 25-34 year old males in 2015 vs 25-34 year old males in 2005 on suicide count
@@ -37,22 +78,28 @@ For non-linear combinations, we will look at the:
 
 1. Ratio of coefficients of the variables "year 2000" and "year 2010"
 
-2. Product of coefficients of the variables "male" and "year 2005" -- this is like looking at the effect of an interaction term.
+2. Product of coefficients of the variables "male" and "year 2005" -- this is like 
+looking at the effect of an interaction term.
 
 
-and draw inferences based on the estimates, confidence intervals and p-values obtained for each combination.
+and draw inferences based on the estimates, confidence intervals and p-values 
+obtained for each combination.
 
 # **Outline** 
 
-This project mainly includes exploratory data analysis, model fitting, linear and nonlinear combination investigation using 
-three statistical analysis tools: R, Python and Stata. The results are also visualized by the corresponding packages in these tools. 
+This project mainly includes exploratory data analysis, model fitting, linear and 
+nonlinear combination investigation using three statistical analysis tools: 
+R, Python and Stata. The results are also visualized by the corresponding packages 
+in these tools. 
 
 ## **Data Description**
 In this tutorial, we use the [1985-2016 Suicide Rates Overview Data](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016) 
-which can be download from [Kaggle](https://www.kaggle.com). It is a compiled dataset pulled from four other datasets 
-linked by time and place. It has 27820 records in total. The target variables we are going to analyze are:
+which can be download from [Kaggle](https://www.kaggle.com). It is a compiled dataset 
+pulled from four other datasets linked by time and place. It has 27820 records in 
+total. The target variables we are going to analyze are:
 
-`country`: country of the suicide records; 101 in total; countries in America and Europe occupy the majority 
+`country`: country of the suicide records; 101 in total; countries in America and 
+Europe occupy the majority 
 
 `year`: year of the suicide records; range from 1985-2016.
 
@@ -69,19 +116,23 @@ linked by time and place. It has 27820 records in total. The target variables we
 
 ## **Model fitting**
 
-Since the response variable `suicides_no` is count based, we have fitted a Poisson regression model with `year`, `sex`, `age`, 
-`gdp_per_capita` as the predictors. Basically, we want to maximize the joint likelihood function below
+Since the response variable `suicides_no` is count based, we have fitted a Poisson 
+regression model with `year`, `sex`, `age`, `gdp_per_capita` as the predictors. 
+Basically, we want to maximize the joint likelihood function below
 
 $$L(\beta) = \prod_{i=1}^n \frac{\lambda_i^{y_i} e^{-\lambda_i}}{y_i!}$$ 
 
-where $\lambda_i$ is the event rate for ith sample and is calculated using the link function $\lambda_i = e^{x_i \beta}$. 
+where $\lambda_i$ is the event rate for ith sample and is calculated using the link 
+function $\lambda_i = e^{x_i \beta}$. 
+
 The log-likelihood function for the Poisson regression model is 
 
 $$\ln L(\beta) = \sum_{i=1}^n (y_ix_i\beta-e^{x_i\beta}-\ln{y_i!})$$
 
-After differentiating this log-likelihood equation with respect to $\beta$ and set to zero, 
-we can get $\sum_{i=1}^n (y_i-e^{x_i\beta})x_i = 0$. Solving this equation for the regression coefficients $\beta$ 
-will yield the Maximum Likelihood Estimate (MLE) for $\beta$.
+After differentiating this log-likelihood equation with respect to $\beta$ and 
+set to zero, we can get $\sum_{i=1}^n (y_i-e^{x_i\beta})x_i = 0$. Solving this 
+equation for the regression coefficients $\beta$ will yield the Maximum Likelihood 
+Estimate (MLE) for $\beta$.
 
 ## **Software and Tools used**
 
@@ -89,55 +140,62 @@ We will demonstrate our core example in 3 programming languages: R, Python and S
 
 ### **R**
 
-To fit a Poisson regression model, we use the glm function in R. We use `log(population)` as the offset, `year`, 
-`sex`, `age`, `gdp_per_capita` as the predictor variables and `suicide_count` as the response variable.
+To fit a Poisson regression model, we use the glm function in R. We use `log(population)` 
+as the offset, `year`, `sex`, `age`, `gdp_per_capita` as the predictor variables and 
+`suicide_count` as the response variable.
 
-While R has an `esticon` function in the `doBy` package that calculates estimates, standard errors, confidence intervals 
-and p-values for the desired linear combination, we did them by hand (and verified them using `esticon`). 
-The vcov() function came in handy to store the variance-covariance matrix of the regression model.
+While R has an `esticon` function in the `doBy` package that calculates estimates, 
+standard errors, confidence intervals and p-values for the desired linear combination, 
+we did them by hand (and verified them using `esticon`). The vcov() function came in 
+handy to store the variance-covariance matrix of the regression model.
 
-For non-linear combinations, we used the `msm` package's `deltamethod` function to compute standard errors.
+For non-linear combinations, we used the `msm` package's `deltamethod` function to 
+compute standard errors.
 
-To plot confidence intervals we used the ggplot package and plotted horizontal error bars for each pair of linear and non-linear combinations.
+To plot confidence intervals we used the ggplot package and plotted horizontal error 
+bars for each pair of linear and non-linear combinations.
 
 ### **Python**
 
-We use the glm function in Python statsmodels with `family=sm.families.Poisson()`, and use the logarithm of population 
-as `offset` to fit the Poisson regression model. For linear combination of the coefficients, the parameter estimates, 
-standard errors and the confidence intervals are obtained by retrieving the paramter array and covariance matrix from 
-the fitted model. The results of the two subgroups are visualized by `matplotlib.pyplot`. The non-linear combination 
-of the coefficients are computed by delta method.
+We use the glm function in Python statsmodels with `family=sm.families.Poisson()`, 
+and use the logarithm of population as `offset` to fit the Poisson regression model. 
+
+For linear combination of the coefficients, the parameter estimates, standard errors 
+and the confidence intervals are obtained by retrieving the paramter array and covariance
+matrix from the fitted model. The results of the two subgroups are visualized by 
+`matplotlib.pyplot`. The non-linear combination of the coefficients are computed by 
+delta method.
 
 ### **Stata**
 
 We can fit the Poisson regression using `poisson` in Stata and use option 
 `offset` to set an offset or use `exposure` which is equivalent to adding 
 `offset(log_var)`. To get the estimated linear combination of coefficients, 
-we can use `lincom`. It will output the point estimates, standard errors, t or z statistics, p-values, and confidence intervals.
-Or simply set the linear combination to the reference level and get the
-results from the output of `poisson` function. Similarly, we can use `nlcom` 
-to get the results for non-linear combination of coefficients.
+we can use `lincom`. It will output the point estimates, standard errors, 
+t or z statistics, p-values, and confidence intervals. Or simply set the linear 
+combination to the reference level and get the results from the output of `poisson` 
+function. Similarly, we can use `nlcom` to get the results for non-linear combination
+of coefficients.
 
 # **Core Analysis** {.tabset .tabset-pills}
 
-## Python
-
-
 ## R
 
-```{r linear_combinations, echo=FALSE, message=FALSE, warning=FALSE, fig.width=13, fig.height=7}
+```{r linear_combinations, echo=TRUE, message=FALSE, warning=FALSE, fig.width=13, fig.height=7}
 
-
-# Construct the confidence interval figures
+    ## The source code is in R/core_example.R ##
 source('R/core_example.R')
 
-      ## Create plots for each of the pairs of combinations ##
+
+
+    ## Create tables for the linear and non-linear combination data##
 
 # 25-34 males, 2005 vs 2015 #
 df1 = create_dataframe(male_25_34_2015, male_25_34_2005,
                        "25-34 Males, 2015", "25-34 Males, 2005")
+df1 = round_df(df1, 5)
 
-plot_ci(dataset=df1)
+DT::datatable(df1)
 
 
 # 35-54 in 2015, male vs female #
@@ -145,7 +203,9 @@ plot_ci(dataset=df1)
 df2 = create_dataframe(male_35_54_2015, female_35_54_2015,
                        "35-54 Males, 2015", "35-54 Females, 2015")
 
-plot_ci(dataset=df2)
+df2 = round_df(df2, 5)
+
+DT::datatable(df2)
 
 
 # male in 2015, 75+ vs 5-14 #
@@ -153,18 +213,219 @@ plot_ci(dataset=df2)
 df3 = create_dataframe(male_75_2015, male_5_14_2015,
                        "75+ Males, 2015", "5-14 Males, 2015")
 
-plot_ci(dataset=df3)
+df3 = round_df(df3, 5)
+DT::datatable(df3)
 
 
+## Create the non-linear combination  ##
+full_df = round_df(full_df, 2)
+DT::datatable(full_df)
 
-
-## Create the non-linear combination plot ##
-
-plot_ci(dataset=full_df, xlab = "NLC CI", ylab = "NLC groups",
-        title="Non-linear Combination (NLC) CI's -- 
-        product and ratio are described in the Introduction")
 
 ```
+
+
+
+
+
+
+## Python
+
+### Data cleaning 
+
+First we download data and do preprocessing. 
+
+```{python, echo=TRUE, eval=FALSE}
+url = "https://raw.githubusercontent.com/aravind1338/506F20GroupProject/main/master.csv"
+df = pd.read_csv(url, index_col=0)
+
+df.rename(columns = {"suicides/100k pop": "suicides_per_100k", "gdp_per_capita ($)": "gdp_per_capita"}, inplace=True)
+
+df.reset_index(inplace = True)
+```
+
+### Analysis
+
+```{python, echo=TRUE, eval=FALSE}
+fml = "suicides_no ~ C(year) + C(sex) + C(age) + gdp_per_capita"
+model = sm.GLM.from_formula(fml, offset=np.log(df['population']), data=df, family=sm.families.Poisson())
+res = model.fit()
+```
+
+#### Linear Combination of Coefficient 
+
+This part explores the linear combination of coefficient. The expected suicides 
+counts, standard errors and 95% confidence intervals are computed using function `lcom`. 
+The results are visualized using `plot_comparison` function. 
+
+```{python, echo=TRUE, eval=FALSE}
+def lcom(var_list, coeffs, cov_matrix, alpha=0.05):   
+    # Function to calculate estimate, std error and confidence intervals
+    # Inputs: var_list - a list of variables to compare (3 items expected)
+    #         coeffs - the fitted coefficients of the model
+    #         cov_matrix - the variance/covariance matrix of the parameter estimates     
+    # Output: a dataframe containing the estimate, std error, lower and upper limits
+    #         for the linear combination
+   
+    trans_list = ['Intercept']
+    coeffs_list = [coeffs['Intercept']]
+       
+    for name in var_list:
+        if "age" in name:
+            trans = "C(age)[T."+name[3:]+"]"
+        elif "sex" in name:
+            trans = "C(sex)[T."+name[3:]+"]"
+        elif "year" in name:
+            trans = "C(year)[T."+name[4:]+"]"
+        if trans in coeffs.index:
+            trans_list.append(trans)
+            coeffs_list.append(coeffs[trans])
+    
+    linear_est = sum(coeffs_list)
+    score = stats.t.ppf(1-alpha/2, res.df_resid)
+
+    variance = 0
+    for a, b in combinations_with_replacement(trans_list, 2):
+        if a == b:
+            variance += cov_matrix[a][b]
+        else:
+            variance += 2*cov_matrix[a][b]
+    
+    output = pd.DataFrame({"estimate": [np.exp(linear_est)], 
+                           "se": [np.exp(linear_est)*np.sqrt(variance)],
+                           "lower": [np.exp(linear_est)-score*np.exp(linear_est)*np.sqrt(variance)], 
+                           "upper": [np.exp(linear_est)+score*np.exp(linear_est)*np.sqrt(variance)]})
+    
+    return output
+    
+def plot_comparison(var_list1, var_list2):
+    # Function to generate bar plot of estimate and confidence interval
+    # Inputs: var_list1 - a list of 3 variables to compare
+    #         var_list2 - variable list with 1 different from var_list1
+    
+    common = list(set(var_list2).intersection(var_list1))
+    
+    df1 = lcom(var_list1, coeffs, cov_matrix, alpha=0.05)
+    df1.index = list(set(var_list1)-set(common))
+    df2 = lcom(var_list2, coeffs, cov_matrix, alpha=0.05)
+    df2.index = list(set(var_list2)-set(common))
+    df = df1.append(df2)
+    
+    est = np.array(df['estimate'])
+    ci = np.array([df1[['lower','upper']].values[0], df2[['lower','upper']].values[0]])
+
+    x_r = np.c_[est-ci[:,0],ci[:,1]-est].T
+    plt.figure(figsize=(15,4))
+    plt.barh(range(len(est)), est, xerr=x_r, fill=False, ecolor='r', capsize=20)
+    plt.xlabel('Linear combination of coefficients (95% CI)')
+    plt.yticks(range(len(est)), [str(lab) for lab in df.index])
+    plt.title(str(common))
+    plt.show()
+    
+    return df
+```
+
+##### Example 1
+
+In this example, we are trying to figure out the linear combination of 25-34 
+years-old males in 2015 and linear combination of 25-34 years old males in 2005.
+
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/Python/Results/lin_year.jpg?raw=true){width=400px}
+
+##### Example 2
+
+In this example, we are trying to figure out the linear combination of 35-54 
+years-old males in 2015 and 35-54 years-old females in 2015.
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/Python/Results/lin_sex.jpg?raw=true){width=400px}
+
+
+##### Example 3
+
+In this example, we are trying to figure out the linear combination of 75+ 
+years-old males in 2015 and 5-14 years-old males in 2015.
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/Python/Results/lin_age.jpg?raw=true){width=400px}
+
+
+#### Non-linear Combination of Coefficient
+
+In this part, we will implement delta method in function `nlcom`to compute 
+the estimates, standard errors and 95% confidence intervals for non-linear combination 
+of the fitted coefficients. The non-linear combination we have used is `ratio` and 
+`product`.
+
+```{python, echo=TRUE, eval=FALSE}
+def nlcom(var_list, coeffs, cov_matrix, alpha=0.05, method="ratio"):
+    # Function to calculate estimate, std error and confidence intervals
+    # Inputs: var_list - a list of variables to compare (3 items expected)
+    #         coeffs - the fitted coefficients of the model
+    #         cov_matrix - the variance/covariance matrix of the parameter estimates
+    #         method - nonlinear combination method
+    # Output: a dataframe containing the estimate, std error, lower and upper limits
+    #         for the linear combination
+    
+    trans_list = ['Intercept']
+    coeffs_list = []
+       
+    for name in var_list:
+        if "age" in name:
+            trans = "C(age)[T."+name[3:]+"]"
+        elif "sex" in name:
+            trans = "C(sex)[T."+name[3:]+"]"
+        elif "year" in name:
+            trans = "C(year)[T."+name[4:]+"]"
+        if trans in coeffs.index:
+            trans_list.append(trans)
+            coeffs_list.append(coeffs[trans])
+            
+    if method == 'product':
+        beta1, beta2 = coeffs[trans_list[1]], coeffs[trans_list[2]]
+        est = np.exp(beta1*beta2)
+        G = np.matrix([0,est*beta2,est*beta1])
+        V = cov_matrix[trans_list].loc[trans_list,:]
+        vcov = np.matrix(V)
+        se   = np.sqrt(G.dot(vcov).dot(G.T))
+        score = stats.t.ppf(1-alpha/2, res.df_resid)
+        ci_l = est - score*se[0,0]
+        ci_u = est + score*se[0,0]
+            
+    if method == 'ratio':
+        beta1, beta2 = coeffs[trans_list[1]], coeffs[trans_list[2]]
+        est = np.exp(beta1/beta2)
+        G = np.matrix([0,est*1./beta2,est*(-beta1/(beta2**2))])
+        V = cov_matrix[trans_list].loc[trans_list,:]
+        vcov = np.matrix(V)
+        se   = np.sqrt(G.dot(vcov).dot(G.T))
+        score = stats.t.ppf(1-alpha/2, res.df_resid)
+        ci_l = est - score*se[0,0]
+        ci_u = est + score*se[0,0]
+        
+    output = pd.DataFrame({"estimate": [est], 
+                           "se": [se[0,0]],
+                           "lower": [ci_l], 
+                           "upper": [ci_u]})
+    
+    if method == 'product':
+        output.index = ['product']
+    if method == 'ratio':
+        output.index = ['ratio']
+    
+    return output
+```
+
+
+##### Example 1
+
+Ratio between year 2000 and year 2010:
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/Python/Results/non_ratio.jpg?raw=true){width=400px}
+
+##### Example 2
+Product between male and year 2005:
+
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/Python/Results/non_prod.jpg?raw=true){width=400px}
 
 
 
@@ -189,7 +450,7 @@ replace gender = 0 if sex == "female"
 label define gender_label 0 "Female" 1 "Male" , replace
 label values gender gender_label
 
-* conveert gdp to numeric
+* convert gdp to numeric
 destring gdp, replace ignore(",")
 
 * convert age from string to categorical
@@ -219,7 +480,7 @@ list in 1/5
 ![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/head.png?raw=true){width=400px}
 
 ### Summary Table
-To have a glance of the data distributions related to variables gender and age group.
+To take a glance of the data distributions related to variables gender and age group.
 ```{stata, echo = TRUE, eval = FALSE}
 tabstat count, by(gender) stats(mean sd n)
 ```
@@ -243,11 +504,11 @@ instead of log incident rate ratios.
 #### Linear Commbination of Coefficient: example 1
 
 In this example, we are trying to figure out the linear combination of coefficients 25-34 
-years old males in 2015 and coefficient of 25-34 years old males in 2005.
+years-old males in 2015 and coefficient of 25-34 years-old males in 2005.
 We can change the base level to these two linear combinations separately and
 get the estimated baseline incidence rate from `_cons` in outputs and its se as well as CI.
 
-To set the base level of poisson regression model, we only need to specify the 
+To set the base level of Poisson regression model, we only need to specify the 
 level between `ib` and `.var` in the poisson formula. For example, in the
 following example, I set the reference level of age group to be 25-34 which is 
 coded as 3, I specify it as `ib3.age_group` in the formula.
@@ -287,7 +548,7 @@ linear combination of coefficients seperately.
 
 #### Linear Combination of Coefficient: example 2
 
-In this example, we are trying to figure out the linear combination of 35-54 years-old males in 2015 and 35-54 years-old female in 2015.
+In this example, we are trying to figure out the linear combination of 35-54 years-old males in 2015 and 35-54 years-old females in 2015.
 
 In default, the baseline level for gender is female.
 ```{stata, echo = TRUE, eval = FALSE}
@@ -307,10 +568,11 @@ poisson count ib4.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 ![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l2_male.png?raw=true){width=450px}
 
 
-#### Linear Commbination of Coefficient: example 3
+#### Linear Combination of Coefficient: example 3
 
 In this example, we are trying to figure out the linear combination of 75+ years-old males in 2015 
-and 5-14 years-old female in 2015.
+and 5-14 years-old males in 2015.
+
 In default, the baseline level for gender is femle. So we don't need to specify 
 the reference level of gender.
 ```{stata, echo = TRUE, eval = FALSE}
@@ -320,14 +582,14 @@ the reference level of gender.
 poisson count ib6.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 ```
 
-![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l2_female.png?raw=true){width=450px}
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l3_75.png?raw=true){width=450px}
 
 ```{stata, echo = TRUE, eval = FALSE}
 *** 5-14 years-old males in 2015
 poisson count ib1.age_group ib1.gender ib2015.year gdp, exposure(population) irr
 ```
 
-![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l2_male.png?raw=true){width=450px}
+![](https://github.com/aravind1338/506F20GroupProject/blob/main/STATA/Results/l3_15.png?raw=true){width=450px}
 
 
 #### Non-linear Combination of Coefficient:
@@ -353,6 +615,30 @@ nlcom (E_ratio: exp(_b[2000.year] / _b[2010.year]))
 
 # **Conclusion/Discussion**
 
+<<<<<<< HEAD
+=======
+There are some slight differences in the standard errors of the non-linear 
+combinations between R and Python; this is most likely because R used the msm 
+package's "deltamethod" function, while Python did the calculation manually. 
+However, the differences are negligible (<0.005) and the estimates are the same.
+
+From the examples presented in the three parallel sections, we can now draw some 
+conclusions based on the linear combination of coefficients obtained by Possion 
+regression model. First, males of 25-34 years old were less likely to commit suicide 
+in 2015 compared to 10 years ago. Second, in 2015, males had higher suicide 
+counts compared to females when they are both 35-54 years old. Finally, in 2015, 
+males of 75+ years old had higher suicide counts than males of 5-14 years old. 
+
+The non-linear combination of coefficient using ratio indicates that the suicide 
+counts in 2010 were less than 2000. Besides, the interaction of males group and 
+year 2005 results in a noticeble inrease in the suicide counts.
+
+We have also noticed that there are small discrepancies in the resulting standard 
+errors across the three computation tools. The main reason may result from their 
+difference in implementing delta method. In R and Python sections, the standard 
+errors for linear combination of coefficients are also computed using delta method.
+
+>>>>>>> upstream/main
 
 # **Reference**
 
